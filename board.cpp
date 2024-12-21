@@ -3,7 +3,7 @@
 
 #include "King.h"
 #include "Knight.h"
-#include "pwn.h"
+#include "Pwn.h"
 #include "Queen.h"
 #include "Rook.h"
 
