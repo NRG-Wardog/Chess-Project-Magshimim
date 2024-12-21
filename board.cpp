@@ -8,7 +8,7 @@
 #include "Rook.h"
 
 #define START_OF_ABC 'a'
-#define START_OF_NUM '1'
+#define START_OF_NUM 1
 
 
 board::board(const std::string& boardData)
@@ -16,10 +16,14 @@ board::board(const std::string& boardData)
     setBoard(boardData);
 }
 
-board::~board()
-{
-    delete[] _board;
+board::~board() {
+    for (int row = 0; row < CHESS_SIZE; ++row) {
+        for (int col = 0; col < CHESS_SIZE; ++col) {
+            delete _board[row][col]; 
+        }
+    }
 }
+
 
 Piece* (&board::getBoard())[CHESS_SIZE][CHESS_SIZE]
 {
@@ -58,9 +62,9 @@ void board::setBoard(const std::string& boardData)
 	        case EMPTY:
                 _board[row][col] = nullptr;
 	        default:
-                throw std::runtime_error("what is that char?");
+                throw std::runtime_error("Invalid piece character '" + std::string(1, pieceChar) + "' at position: " + pos);
 	        }
-            
         }
+        color = 'b';
     }
 }
