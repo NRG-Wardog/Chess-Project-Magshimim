@@ -2,6 +2,7 @@
 #include <cctype>
 #include <stdexcept>
 
+#include "Bishop.h"
 #include "King.h"
 #include "Knight.h"
 #include "Pwn.h"
@@ -69,13 +70,15 @@ void Board::setBoard(const std::string& boardData)
                 break;
 	        case KING:
                 _board[row][col] = new King(color, pos);
-                break;;
+                break;
 	        case QUEEN:
                 _board[row][col] = new Queen(color, pos);
                 break;
 	        case KNIGHT:
                 _board[row][col] = new Knight(color, pos);
                 break;
+            case BISHOP:
+                _board[row][col] = new Bishop(color, pos);
 	        case EMPTY:
                 _board[row][col] = nullptr;
 	        default:
@@ -107,9 +110,6 @@ std::string Board::toString() const {
 
     return boardString;
 }
-
-#include "Board.h"
-#include <stdexcept>
 
 void Board::movePiece(const std::string& from, const std::string& to) {
     // Convert "from" and "to" to row and column indices
