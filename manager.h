@@ -1,15 +1,12 @@
-
-
 #ifndef MANAGER_H
 #define MANAGER_H
 
-#include <vector>
-#include <string>
+#include "board.h"
 #include "pieces.h"
+
 
 class Manager {
 private:
-    std::vector<std::vector<Piece*>> board;
     bool isWhiteTurn;
    
 

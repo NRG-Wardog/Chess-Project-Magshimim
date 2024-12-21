@@ -12,6 +12,8 @@ public:
     void move(const std::string& newPosition) override;
 
     bool canMove(const std::string& newPosition) const override;
+    std::string getType() const override { return std::string("Knight"); }
+
 };
 
 #endif // KNIGHT_H

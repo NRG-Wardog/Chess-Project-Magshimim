@@ -40,6 +40,7 @@ void main()
 			return;
 		}
 	}
+
 	
 
 	char msgToGraphics[1024];

@@ -127,10 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="board.h" />
+    <ClInclude Include="Board.h" />
     <ClInclude Include="King.h" />
     <ClInclude Include="Knight.h" />
-    <ClInclude Include="pieces.h" />
+    <ClInclude Include="manager.h" />
+    <ClInclude Include="Pieces.h" />
     <ClInclude Include="Pipe.h" />
     <ClInclude Include="Pwn.h" />
     <ClInclude Include="Queen.h" />
@@ -139,8 +140,11 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="board.cpp" />
-    <ClCompile Include="pieces.cpp" />
+    <ClCompile Include="Board.cpp" />
+    <ClCompile Include="King.cpp" />
+    <ClCompile Include="manager.cpp" />
+    <ClCompile Include="Pieces.cpp" />
+    <ClCompile Include="Pwn.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>

@@ -1,5 +1,5 @@
 #include "pieces.h"
-
+#include <iostream>
 #include <stdexcept>
 
 Piece::Piece(const char col, const std::string& pos)
@@ -27,3 +27,9 @@ void Piece::setPosition(const std::string& pos)
 	_position = pos;
 }
 
+std::ostream& operator<<(std::ostream& os, const Piece& piece) {
+    os << "Piece: " << piece.getType() 
+       << ", Color: " << (piece._color == 'w' ? "White" : "Black") 
+       << ", Position: " << piece._position;
+    return os;
+}

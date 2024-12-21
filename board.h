@@ -15,13 +15,14 @@
 #define PWN 'p'
 #define EMPTY '#'
 
-class board
+class Board
 {
 public:
     
-    board(const std::string& boardData);
-    ~board();    
-    Piece* (&getBoard())[CHESS_SIZE][CHESS_SIZE];
+    Board(const std::string& boardData);
+    ~Board();    
+    Piece* const (&getBoard() const)[CHESS_SIZE][CHESS_SIZE];
+    Piece* getSymbol(std::string& pos) const;
     void setBoard(const std::string& boardData);
 
 

@@ -1,21 +1,13 @@
 #include "manager.h";
-#include "board.h";
 #include <iostream>
+#define START_OF_ABC 'a'
+#define START_OF_NUM 1
 
 
+Manager::Manager() : isWhiteTurn(true)
+{}
 
-Manager::Manager() : isWhiteTurn(true) {
-    board.resize(8, std::vector<Piece*>(8, nullptr));
-}
-
-Manager::~Manager() {
-
-    for (auto& row : board) {
-        for (auto& piece : row) {
-            delete piece;
-        }
-    }
-}
+Manager::~Manager() {}
 
 void startGame()
 {
@@ -31,57 +23,59 @@ void startGame()
             "pppppppp" 
             "rnbqkbnr"; 
 
-        board chessBoard(initialBoard);
+        Board chessBoard(initialBoard);
+        while (true)
+        {
 
-     
-        auto& chess = chessBoard.getBoard();
-        std::cout << "Initial Board Setup:" << std::endl;
-        for (int row = 0; row < CHESS_SIZE; ++row) {
-            for (int col = 0; col < CHESS_SIZE; ++col) {
-                if (chess[row][col] != nullptr) {
-                    std::cout << chess[row][col]->getSymbol() << " ";
-                } else {
-                    std::cout << ". ";
-                }
-            }
-            std::cout << std::endl;
+
+
+
         }
-    } catch (const std::exception& e) {
+    }
+	catch (const std::exception& e) 
+    {
         std::cerr << "Error initializing the game: " << e.what() << std::endl;
     }
 }
-bool validateMove(Pieces* piece, int x, int y)
+bool validateMove(Board board, int x, int y)
 {
-  return canMove();
+  //return canMove();
+    return true;
 }
-void movePiece(Piece* piece, int x, int y)
+void movePiece(Board board, int x, int y)
 {
-  move(int x, int y);
+
+    //move(int x, int y);
 }
 bool isCheck()
 {
-  return isAttacked();
+    return false;
+  //return isAttacked();
 }
 void resetGame()
 {
-  void startGame();
+  startGame();
 }
 //bool isGameOver()
 
 
-void displayBoard()
-{ 
+void displayBoard(Board _chessBoard)
+{
   auto& chess = _chessBoard.getBoard(); 
 
   std::cout << "  a b c d e f g h" << std::endl; 
-  for (int row = CHESS_SIZE - 1; row >= 0; --row) { 
-      std::cout << row + 1 << " "; 
-      for (int col = 0; col < CHESS_SIZE; ++col) {
+  for (int row = CHESS_SIZE - 1; row >= 0; --row)
+  {
+      std::cout << row + 1 << " ";
+      for (int col = 0; col < CHESS_SIZE; ++col)
+      {
           if (chess[row][col] != nullptr) {
-              std::cout << chess[row][col]->getSymbol() << " "; 
-          } else {
-              std::cout << ". "; 
+              std::cout << chess[row][col] << " ";
+          }
+          else {
+              std::cout << ". ";
           }
       }
-      std::cout << row + 1 << std::endl; 
+      std::cout << row + 1 << std::endl;
+  }
 }
