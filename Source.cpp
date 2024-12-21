@@ -1,80 +1,72 @@
-/*
-This file servers as an example of how to use Pipe.h file.
-It is recommended to use the following code in your project, 
-in order to read and write information from and to the Backend
-*/
-
 #include "Pipe.h"
+#include "Board.h"
 #include <iostream>
 #include <thread>
+#include <string>
+#include <chrono>
+#include <stdexcept>
 
 using std::cout;
 using std::endl;
 using std::string;
 
+int main() {
+    srand(time_t(NULL));
+    Pipe p;
+    bool isConnect = p.connect();
 
-void main()
-{
-	srand(time_t(NULL));
+    string ans;
+    while (!isConnect) {
+        cout << "Can't connect to graphics" << endl;
+        cout << "Do you want to try again or exit? (0-try again, 1-exit)" << endl;
+        std::cin >> ans;
 
-	
-	Pipe p;
-	bool isConnect = p.connect();
-	
-	string ans;
-	while (!isConnect)
-	{
-		cout << "cant connect to graphics" << endl;
-		cout << "Do you try to connect again or exit? (0-try again, 1-exit)" << endl;
-		std::cin >> ans;
+        if (ans == "0") {
+            cout << "Trying to connect again..." << endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+            isConnect = p.connect();
+        }
+        else {
+            p.close();
+            return 0;
+        }
+    }
 
-		if (ans == "0")
-		{
-			cout << "trying connect again.." << endl;
-			Sleep(5000);
-			isConnect = p.connect();
-		}
-		else 
-		{
-			p.close();
-			return;
-		}
-	}
+    try {
+        char msgToGraphics[1024];
 
-	
+        // Initialize the board
+        Board board("rnbkqbnrpppppppp################################PPPPPPPPRNBKQBNR1");
+        strcpy_s(msgToGraphics, board.toString().c_str()); // Convert board to string
 
-	char msgToGraphics[1024];
-	// msgToGraphics should contain the board string accord the protocol
-	// YOUR CODE
+        p.sendMessageToGraphics(msgToGraphics); // Send the board string
 
-	strcpy_s(msgToGraphics, "rnbkqbnrpppppppp################################PPPPPPPPRNBKQBNR1"); // just example...
-	
-	p.sendMessageToGraphics(msgToGraphics);   // send the board string
-
-	// get message from graphics
-	string msgFromGraphics = p.getMessageFromGraphics();
-
-	while (msgFromGraphics != "quit")
-	{
-		// should handle the string the sent from graphics
-		// according the protocol. Ex: e2e4           (move e2 to e4)
-		
-		// YOUR CODE
-		strcpy_s(msgToGraphics, "YOUR CODE"); // msgToGraphics should contain the result of the operation
-
-		/******* JUST FOR EREZ DEBUGGING ******/
-		int r = rand() % 10; // just for debugging......
-		msgToGraphics[0] = (char)(1 + '0');
-		msgToGraphics[1] = 0;
-		/******* JUST FOR EREZ DEBUGGING ******/
+        string msgFromGraphics = p.getMessageFromGraphics();
+        while (msgFromGraphics != "quit") {
+            // Parse and execute move
+            std::string from = msgFromGraphics.substr(0, 2);
+            std::string to = msgFromGraphics.substr(2, 2);
+            try
+            {
+                board.movePiece(from, to);
+                strcpy_s(msgToGraphics, "1"); // Success
+            }
+            catch (const std::exception& e) {
+                // Handle invalid moves
+                strcpy_s(msgToGraphics, sizeof(msgToGraphics), "0");
+                std::cerr << "Error handling move: " << e.what() << std::endl;
+            }
 
 
-		// return result to graphics		
-		p.sendMessageToGraphics(msgToGraphics);   
 
-		// get message from graphics
-		msgFromGraphics = p.getMessageFromGraphics();
-	}
+            p.sendMessageToGraphics(msgToGraphics); // Send result back to graphics
+            msgFromGraphics = p.getMessageFromGraphics(); // Get next message
+        }
+    }
+    catch (std::exception& e) {
+        std::cerr << "An error occurred: " << e.what() << std::endl;
+    }
+    p.close();
 
-	p.close();
+    return 0;
 }

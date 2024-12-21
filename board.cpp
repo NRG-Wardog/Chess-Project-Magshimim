@@ -84,3 +84,171 @@ void Board::setBoard(const std::string& boardData)
         }
     }
 }
+
+std::string Board::toString() const {
+    std::string boardString;
+
+    for (int row = 0; row < CHESS_SIZE; ++row) {
+        for (int col = 0; col < CHESS_SIZE; ++col) {
+            if (_board[row][col] == nullptr) {
+                boardString += '#'; 
+            }
+            else {
+                char pieceType = _board[row][col]->getType()[0]; 
+                if (_board[row][col]->getColor() == 'w') {
+                    boardString += pieceType; 
+                }
+                else {
+                    boardString += std::tolower(pieceType); // Black pieces are lowercase
+                }
+            }
+        }
+    }
+
+    return boardString;
+}
+
+#include "Board.h"
+#include <stdexcept>
+
+void Board::movePiece(const std::string& from, const std::string& to) {
+    // Convert "from" and "to" to row and column indices
+    int fromRow = from[1] - '1';
+    int fromCol = from[0] - 'a';
+    int toRow = to[1] - '1';
+    int toCol = to[0] - 'a';
+
+    // Validate bounds
+    if (fromRow < 0 || fromRow >= CHESS_SIZE || fromCol < 0 || fromCol >= CHESS_SIZE ||
+        toRow < 0 || toRow >= CHESS_SIZE || toCol < 0 || toCol >= CHESS_SIZE) {
+        throw std::out_of_range("Move out of bounds.");
+    }
+
+    // Get the piece at the "from" position
+    Piece* piece = _board[fromRow][fromCol];
+    if (piece == nullptr) {
+        throw std::invalid_argument("No piece at the source position.");
+    }
+
+    // Get the type and color of the piece
+    std::string pieceType = piece->getType();
+    std::string toPosition = std::string(1, 'a' + toCol) + std::to_string(toRow + 1);
+
+    // Check if the move is valid for the piece
+    if (!piece->canMove(toPosition)) {
+        throw std::invalid_argument("Invalid move for the selected piece.");
+    }
+
+    // Path validation for applicable pieces
+    if (pieceType == "Rook" || pieceType == "Bishop" || pieceType == "Queen") {
+        if (!isPathClear(fromRow, fromCol, toRow, toCol, pieceType)) {
+            throw std::invalid_argument("Path is blocked.");
+        }
+    }
+
+    // Handle capturing
+    Piece* targetPiece = _board[toRow][toCol];
+    if (targetPiece != nullptr) {
+        if (targetPiece->getColor() == piece->getColor()) {
+            throw std::invalid_argument("Cannot capture your own piece.");
+        }
+        delete targetPiece; // Remove the captured piece
+    }
+
+    // Perform the move
+    _board[toRow][toCol] = piece;
+    _board[fromRow][fromCol] = nullptr;
+    piece->setPosition(toPosition);
+}
+
+
+bool Board::isPathClear(int fromRow, int fromCol, int toRow, int toCol, const std::string& pieceType) const {
+    int rowDiff = toRow - fromRow;
+    int colDiff = toCol - fromCol;
+
+    if (pieceType == "Rook") {
+        // Rook moves must be straight: either rowDiff or colDiff is 0
+        if (rowDiff != 0 && colDiff != 0)
+        {
+            return false;
+        }
+
+        // Determine direction of movement
+        int rowDirection = (rowDiff == 0) ? 0 : rowDiff / abs(rowDiff);
+        int colDirection = (colDiff == 0) ? 0 : colDiff / abs(colDiff);
+
+        // Check path for obstacles
+        int currentRow = fromRow + rowDirection;
+        int currentCol = fromCol + colDirection;
+        while (currentRow != toRow || currentCol != toCol) {
+            if (_board[currentRow][currentCol] != nullptr) {
+                return false; // Path is blocked
+            }
+            currentRow += rowDirection;
+            currentCol += colDirection;
+        }
+        return true; // Path is clear
+    }
+    else if (pieceType == "Bishop") {
+        // Bishop moves must be diagonal: abs(rowDiff) == abs(colDiff)
+        if (abs(rowDiff) != abs(colDiff)) return false;
+
+        // Determine direction of movement
+        int rowDirection = rowDiff / abs(rowDiff);
+        int colDirection = colDiff / abs(colDiff);
+
+        // Check path for obstacles
+        int currentRow = fromRow + rowDirection;
+        int currentCol = fromCol + colDirection;
+        while (currentRow != toRow || currentCol != toCol) {
+            if (_board[currentRow][currentCol] != nullptr) {
+                return false; // Path is blocked
+            }
+            currentRow += rowDirection;
+            currentCol += colDirection;
+        }
+        return true; // Path is clear
+    }
+    else if (pieceType == "Queen") {
+        // Queen moves must be straight or diagonal
+        if (fromRow == toRow || fromCol == toCol) {
+            // Straight-line move (like Rook)
+            int rowDirection = (rowDiff == 0) ? 0 : rowDiff / abs(rowDiff);
+            int colDirection = (colDiff == 0) ? 0 : colDiff / abs(colDiff);
+
+            int currentRow = fromRow + rowDirection;
+            int currentCol = fromCol + colDirection;
+            while (currentRow != toRow || currentCol != toCol) {
+                if (_board[currentRow][currentCol] != nullptr) {
+                    return false; // Path is blocked
+                }
+                currentRow += rowDirection;
+                currentCol += colDirection;
+            }
+            return true; // Path is clear
+        }
+        else if (abs(rowDiff) == abs(colDiff)) {
+            // Diagonal move (like Bishop)
+            int rowDirection = rowDiff / abs(rowDiff);
+            int colDirection = colDiff / abs(colDiff);
+
+            int currentRow = fromRow + rowDirection;
+            int currentCol = fromCol + colDirection;
+            while (currentRow != toRow || currentCol != toCol) {
+                if (_board[currentRow][currentCol] != nullptr) {
+                    return false; // Path is blocked
+                }
+                currentRow += rowDirection;
+                currentCol += colDirection;
+            }
+            return true; // Path is clear
+        }
+        return false; // Invalid move for Queen
+    }
+    else if (pieceType == "Knight"|| pieceType == "Pawn")
+    {
+        return true;
+    }
+    return false; // Invalid piece type or unsupported path validation
+}
+

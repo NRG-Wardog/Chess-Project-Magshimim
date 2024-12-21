@@ -9,19 +9,19 @@ Manager::Manager() : isWhiteTurn(true)
 
 Manager::~Manager() {}
 
-void startGame()
+void Manager::startGame()
 {
-  try {
-        
+    try {
+
         std::string initialBoard =
-            "RNBQKBNR" 
-            "PPPPPPPP" 
-            "........" 
+            "RNBQKBNR"
+            "PPPPPPPP"
             "........"
             "........"
             "........"
-            "pppppppp" 
-            "rnbqkbnr"; 
+            "........"
+            "pppppppp"
+            "rnbqkbnr";
 
         Board chessBoard(initialBoard);
         while (true)
@@ -32,34 +32,43 @@ void startGame()
 
         }
     }
-	catch (const std::exception& e) 
+    catch (const std::exception& e)
     {
         std::cerr << "Error initializing the game: " << e.what() << std::endl;
     }
 }
-bool validateMove(Board board, int x, int y)
+
+bool Manager::validateMove(Piece* piece, int x, int y)
 {
-  //return canMove();
+    //return canMove();
     return true;
 }
-void movePiece(Board board, int x, int y)
+
+void Manager::movePiece(Piece* piece, int x, int y)
 {
 
     //move(int x, int y);
 }
-bool isCheck()
+
+bool Manager::isCheck()
 {
     return false;
-  //return isAttacked();
+    //return isAttacked();
+
 }
-void resetGame()
+
+void Manager::resetGame()
 {
-  startGame();
+    startGame();
 }
-//bool isGameOver()
+
+bool Manager::isGameOver()
+{
+    return false;
+}
 
 
-void displayBoard(Board _chessBoard)
+void Manager::displayBoard(Board _chessBoard)
 {
   auto& chess = _chessBoard.getBoard(); 
 

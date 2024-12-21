@@ -130,7 +130,7 @@
     <ClInclude Include="Board.h" />
     <ClInclude Include="King.h" />
     <ClInclude Include="Knight.h" />
-    <ClInclude Include="manager.h" />
+    <ClInclude Include="Manager.h" />
     <ClInclude Include="Pieces.h" />
     <ClInclude Include="Pipe.h" />
     <ClInclude Include="Pwn.h" />
@@ -142,7 +142,7 @@
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="King.cpp" />
-    <ClCompile Include="manager.cpp" />
+    <ClCompile Include="Manager.cpp" />
     <ClCompile Include="Pieces.cpp" />
     <ClCompile Include="Pwn.cpp" />
     <ClCompile Include="Source.cpp" />
