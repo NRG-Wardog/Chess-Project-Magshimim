@@ -51,6 +51,9 @@
     <ClInclude Include="Bishop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MoveException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">

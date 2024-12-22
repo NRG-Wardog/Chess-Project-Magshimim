@@ -10,7 +10,6 @@
 class Manager {
 private:
     bool isWhiteTurn;
-    King king;
     Pipe pipe;
 
 public:

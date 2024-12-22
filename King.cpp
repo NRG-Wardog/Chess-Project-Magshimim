@@ -35,6 +35,7 @@ bool King::isAttacked(const Board& currentBoard)
             }
         }
     }
+    return false;
 }
 
 bool King::canMove(const std::string& newPosition) const

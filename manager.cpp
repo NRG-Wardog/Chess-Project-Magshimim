@@ -1,15 +1,15 @@
-#include "manager.h"
+#include "Manager.h"
 #include "board.h"
 #include "pieces.h"
 #include <iostream>
+
+#include "MoveException.h"
 #define START_OF_ABC 'a'
 #define START_OF_NUM 1
 
 
-Manager::Manager() : isWhiteTurn(true)
-{
-
-}
+Manager::Manager() : isWhiteTurn(true) 
+{}
 
 Manager::~Manager() {}
 
@@ -47,7 +47,8 @@ void Manager::movePiece(Piece* piece, std::string& newPosition)
 
 bool Manager::isCheck()
 {
-    return king.isAttacked();
+    //return king.isAttacked();
+    return false;
 }
 
 void Manager::resetGame()
@@ -57,7 +58,8 @@ void Manager::resetGame()
 
 bool Manager::isGameOver()
 {
-    return king.isAttacked() && !king.canMove();
+    //return king.isAttacked() && !king.canMove();
+    return false;
 }
 
 void Manager::displayBoard(Board _chessBoard)
@@ -84,9 +86,9 @@ void Manager::displayBoard(Board _chessBoard)
 void Manager::gameLoop()
 {
     startGame();
-    while (isGameOver() = false)
+    while (isGameOver() == false)
     {
-        Piece* selectedPiece = board.getSymbol();
+        Piece* selectedPiece = board.getSymbol(); // what is board?
         if (selectedPiece == nullptr) {
             throw std::invalid_argument("No piece at the selected position");
         }
@@ -96,18 +98,19 @@ void Manager::gameLoop()
             throw std::invalid_argument("It's not your turn");
         }
 
-        string msgFromGraphics = pipe.getMessageFromGraphics();
+        std::string msgFromGraphics = pipe.getMessageFromGraphics();
         std::string newPosition = msgFromGraphics.substr(2, 2);
         if (!validateMove(selectedPiece, newPosition)) {
             throw std::invalid_argument("Invalid move for the selected piece");
         }
         
         movePiece(selectedPiece, newPosition);
-        board.getBoard() // [][] = selectedPiece;
+        board.getBoard(); // [][] = selectedPiece; what is board??
         // board.getBoard() //[][] = nullptr;
 
         if (isCheck() == true)
         {
+            throw MoveException::createException(3);
             //  only king can move
         }
         

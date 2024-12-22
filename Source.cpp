@@ -1,11 +1,13 @@
 #include "Pipe.h"
 #include "board.h"
-#include "manager.h"
+#include "Manager.h"
 #include <iostream>
 #include <thread>
 #include <string>
 #include <chrono>
 #include <stdexcept>
+
+#include "MoveException.h"
 
 using std::cout;
 using std::endl;
@@ -13,7 +15,7 @@ using std::string;
 
 int main() {
     srand(time_t(NULL));
-    
+    Pipe p;
     bool isConnect = p.connect();
 
     string ans;
@@ -33,14 +35,14 @@ int main() {
         }
     }
 
-    manager::gameLoop();
+    Manager::gameLoop();//fix what that need to be
 
     try {
         char msgToGraphics[1024];
 
         // Initialize the board
-        Board board;
-        board.setBoard();
+        Board board; // need to Board(const std::string& boardData);
+        board.setBoard();//like 44
         strcpy_s(msgToGraphics, board.toString().c_str()); // Convert board to string
 
         p.sendMessageToGraphics(msgToGraphics); // Send the board string
@@ -64,6 +66,9 @@ int main() {
             p.sendMessageToGraphics(msgToGraphics); // Send result back to graphics
             msgFromGraphics = p.getMessageFromGraphics(); // Get next message
         }
+    }
+    catch (const MoveException& e) {
+        std::cerr << "Error " << e.getErrorCode() << ": " << e.what() << std::endl;
     }
     catch (std::exception& e) {
         std::cerr << "An error occurred: " << e.what() << std::endl;
