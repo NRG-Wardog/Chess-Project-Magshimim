@@ -1,4 +1,6 @@
-#include "manager.h";
+#include "manager.h"
+#include "board.h"
+#include "pieces.h"
 #include <iostream>
 #define START_OF_ABC 'a'
 #define START_OF_NUM 1
@@ -24,14 +26,13 @@ void Manager::startGame()
             "rnbqkbnr";
 
         Board chessBoard(initialBoard);
-        while (true)
-        {
-
-
-
-
-        }
+ 
     }
+
+
+
+
+
     catch (const std::exception& e)
     {
         std::cerr << "Error initializing the game: " << e.what() << std::endl;
@@ -46,7 +47,6 @@ bool Manager::validateMove(Piece* piece, int x, int y)
 
 void Manager::movePiece(Piece* piece, int x, int y)
 {
-
     //move(int x, int y);
 }
 
@@ -88,3 +88,42 @@ void Manager::displayBoard(Board _chessBoard)
       std::cout << row + 1 << std::endl;
   }
 }
+
+
+
+void Manager::gameLoop()
+{
+    while (isGameover() = false)
+    {
+        startGame();
+    
+        Piece* selectedPiece = board.getSymbol();
+        if (selectedPiece == nullptr) {
+            throw std::invalid_argument("No piece at the selected position");
+        }
+
+        if ((isWhiteTurn && selectedPiece->getColor() != 'w') ||
+            (!isWhiteTurn && selectedPiece->getColor() != 'b')) {
+            throw std::invalid_argument("It's not your turn");
+        }
+
+
+        if (!validateMove(selectedPiece, toX, toY)) {
+            throw std::invalid_argument("Invalid move for the selected piece");
+        }
+
+        
+        movePiece(selectedPiece, toX, toY);
+        board.getBoard()[][] = selectedPiece;
+        board.getBoard()[][] = nullptr;
+
+        
+
+        if(isCheck() == true)
+        {
+
+        }
+        
+    }
+}
+

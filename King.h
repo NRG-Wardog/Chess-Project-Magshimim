@@ -3,7 +3,7 @@
 
 #include <stdexcept>
 
-#include "Board.h"
+#include "board.h"
 #include "pieces.h"
 
 class King : public Piece {

@@ -13,10 +13,8 @@ private:
 public:
     
     Manager();
-
     
     ~Manager();
-
     
     void startGame(); 
     bool validateMove(Piece* piece, int x, int y);
@@ -25,6 +23,7 @@ public:
     void resetGame(); 
     bool isGameOver(); 
     void displayBoard(Board _chessBoard);
+    void gameLoop();
 };
 
 #endif
