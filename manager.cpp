@@ -1,11 +1,15 @@
-#include "manager.h";
+#include "manager.h"
+#include "board.h"
+#include "pieces.h"
 #include <iostream>
 #define START_OF_ABC 'a'
 #define START_OF_NUM 1
 
 
 Manager::Manager() : isWhiteTurn(true)
-{}
+{
+
+}
 
 Manager::~Manager() {}
 
@@ -24,13 +28,6 @@ void Manager::startGame()
             "rnbqkbnr";
 
         Board chessBoard(initialBoard);
-        while (true)
-        {
-
-
-
-
-        }
     }
     catch (const std::exception& e)
     {
@@ -38,23 +35,19 @@ void Manager::startGame()
     }
 }
 
-bool Manager::validateMove(Piece* piece, int x, int y)
+bool Manager::validateMove(Piece* piece, std::string& newPosition)
 {
-    //return canMove();
-    return true;
+    return piece->canMove(newPosition);
 }
 
-void Manager::movePiece(Piece* piece, int x, int y)
+void Manager::movePiece(Piece* piece, std::string& newPosition)
 {
-
-    //move(int x, int y);
+    piece->move(newPosition);
 }
 
 bool Manager::isCheck()
 {
-    return false;
-    //return isAttacked();
-
+    return king.isAttacked();
 }
 
 void Manager::resetGame()
@@ -64,9 +57,8 @@ void Manager::resetGame()
 
 bool Manager::isGameOver()
 {
-    return false;
+    return king.isAttacked() && !king.canMove();
 }
-
 
 void Manager::displayBoard(Board _chessBoard)
 {
@@ -88,3 +80,37 @@ void Manager::displayBoard(Board _chessBoard)
       std::cout << row + 1 << std::endl;
   }
 }
+
+void Manager::gameLoop()
+{
+    startGame();
+    while (isGameOver() = false)
+    {
+        Piece* selectedPiece = board.getSymbol();
+        if (selectedPiece == nullptr) {
+            throw std::invalid_argument("No piece at the selected position");
+        }
+
+        if ((isWhiteTurn && selectedPiece->getColor() != 'w') ||
+            (!isWhiteTurn && selectedPiece->getColor() != 'b')) {
+            throw std::invalid_argument("It's not your turn");
+        }
+
+        string msgFromGraphics = pipe.getMessageFromGraphics();
+        std::string newPosition = msgFromGraphics.substr(2, 2);
+        if (!validateMove(selectedPiece, newPosition)) {
+            throw std::invalid_argument("Invalid move for the selected piece");
+        }
+        
+        movePiece(selectedPiece, newPosition);
+        board.getBoard() // [][] = selectedPiece;
+        // board.getBoard() //[][] = nullptr;
+
+        if (isCheck() == true)
+        {
+            //  only king can move
+        }
+        
+    }
+}
+

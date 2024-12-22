@@ -27,12 +27,10 @@ void Pwn::move(int toX, int toY) {
     if (!canMove(toX, toY)) {
         throw Exception("Invalid pawn move!");
     }
-
    
     if (std::abs(toX - getX()) == 2 && hasMoved) {
         throw Exception("Pawn cannot move two squares after its first move.");
     }
-
   
     setPosition(toX, toY);
     hasMoved = true;
@@ -41,11 +39,6 @@ void Pwn::move(int toX, int toY) {
 
 
 
-
-void mateLead()
-{
-
-}
 
 std::string getExceptionMessage()
 {

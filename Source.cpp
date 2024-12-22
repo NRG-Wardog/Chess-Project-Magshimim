@@ -1,5 +1,6 @@
 #include "Pipe.h"
-#include "Board.h"
+#include "board.h"
+#include "manager.h"
 #include <iostream>
 #include <thread>
 #include <string>
@@ -12,7 +13,7 @@ using std::string;
 
 int main() {
     srand(time_t(NULL));
-    Pipe p;
+    
     bool isConnect = p.connect();
 
     string ans;
@@ -32,11 +33,14 @@ int main() {
         }
     }
 
+    manager::gameLoop();
+
     try {
         char msgToGraphics[1024];
 
         // Initialize the board
-        Board board("rnbkqbnrpppppppp################################PPPPPPPPRNBKQBNR1");
+        Board board;
+        board.setBoard();
         strcpy_s(msgToGraphics, board.toString().c_str()); // Convert board to string
 
         p.sendMessageToGraphics(msgToGraphics); // Send the board string
@@ -52,12 +56,10 @@ int main() {
                 strcpy_s(msgToGraphics, "1"); // Success
             }
             catch (const std::exception& e) {
-                // Handle invalid moves
+                bool validateMove(Piece* piece, int x, int y);
                 strcpy_s(msgToGraphics, sizeof(msgToGraphics), "0");
                 std::cerr << "Error handling move: " << e.what() << std::endl;
             }
-
-
 
             p.sendMessageToGraphics(msgToGraphics); // Send result back to graphics
             msgFromGraphics = p.getMessageFromGraphics(); // Get next message
