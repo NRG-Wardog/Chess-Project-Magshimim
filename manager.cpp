@@ -7,7 +7,9 @@
 
 
 Manager::Manager() : isWhiteTurn(true)
-{}
+{
+
+}
 
 Manager::~Manager() {}
 
@@ -26,35 +28,26 @@ void Manager::startGame()
             "rnbqkbnr";
 
         Board chessBoard(initialBoard);
- 
     }
-
-
-
-
-
     catch (const std::exception& e)
     {
         std::cerr << "Error initializing the game: " << e.what() << std::endl;
     }
 }
 
-bool Manager::validateMove(Piece* piece, int x, int y)
+bool Manager::validateMove(Piece* piece, std::string& newPosition)
 {
-    //return canMove();
-    return true;
+    return piece->canMove(newPosition);
 }
 
-void Manager::movePiece(Piece* piece, int x, int y)
+void Manager::movePiece(Piece* piece, std::string& newPosition)
 {
-    //move(int x, int y);
+    piece->move(newPosition);
 }
 
 bool Manager::isCheck()
 {
-    return false;
-    //return isAttacked();
-
+    return king.isAttacked();
 }
 
 void Manager::resetGame()
@@ -64,9 +57,8 @@ void Manager::resetGame()
 
 bool Manager::isGameOver()
 {
-    return false;
+    return king.isAttacked() && !king.canMove();
 }
-
 
 void Manager::displayBoard(Board _chessBoard)
 {
@@ -89,14 +81,11 @@ void Manager::displayBoard(Board _chessBoard)
   }
 }
 
-
-
 void Manager::gameLoop()
 {
-    while (isGameover() = false)
+    startGame();
+    while (isGameOver() = false)
     {
-        startGame();
-    
         Piece* selectedPiece = board.getSymbol();
         if (selectedPiece == nullptr) {
             throw std::invalid_argument("No piece at the selected position");
@@ -107,21 +96,19 @@ void Manager::gameLoop()
             throw std::invalid_argument("It's not your turn");
         }
 
-
-        if (!validateMove(selectedPiece, toX, toY)) {
+        string msgFromGraphics = pipe.getMessageFromGraphics();
+        std::string newPosition = msgFromGraphics.substr(2, 2);
+        if (!validateMove(selectedPiece, newPosition)) {
             throw std::invalid_argument("Invalid move for the selected piece");
         }
-
         
-        movePiece(selectedPiece, toX, toY);
-        board.getBoard()[][] = selectedPiece;
-        board.getBoard()[][] = nullptr;
+        movePiece(selectedPiece, newPosition);
+        board.getBoard() // [][] = selectedPiece;
+        // board.getBoard() //[][] = nullptr;
 
-        
-
-        if(isCheck() == true)
+        if (isCheck() == true)
         {
-
+            //  only king can move
         }
         
     }

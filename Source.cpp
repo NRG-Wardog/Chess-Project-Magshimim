@@ -13,12 +13,8 @@ using std::string;
 
 int main() {
     srand(time_t(NULL));
-    Pipe p;
-    bool isConnect = p.connect();
-
-
-
     
+    bool isConnect = p.connect();
 
     string ans;
     while (!isConnect) {
@@ -43,7 +39,8 @@ int main() {
         char msgToGraphics[1024];
 
         // Initialize the board
-        board setBoard();
+        Board board;
+        board.setBoard();
         strcpy_s(msgToGraphics, board.toString().c_str()); // Convert board to string
 
         p.sendMessageToGraphics(msgToGraphics); // Send the board string
@@ -63,8 +60,6 @@ int main() {
                 strcpy_s(msgToGraphics, sizeof(msgToGraphics), "0");
                 std::cerr << "Error handling move: " << e.what() << std::endl;
             }
-
-
 
             p.sendMessageToGraphics(msgToGraphics); // Send result back to graphics
             msgFromGraphics = p.getMessageFromGraphics(); // Get next message
