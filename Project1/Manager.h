@@ -25,7 +25,7 @@ public:
     void resetGame(); 
     bool isGameOver(); 
     void displayBoard(Board _chessBoard);
-    void gameLoop();
+    void gameLoop(Board& board);
 };
 
 #endif

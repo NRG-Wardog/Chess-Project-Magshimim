@@ -1,5 +1,5 @@
 #include "Pipe.h"
-#include "board.h"
+#include "Board.h"
 #include "Manager.h"
 #include <iostream>
 #include <thread>
@@ -17,7 +17,7 @@ int main() {
     srand(time_t(NULL));
     Pipe p;
     bool isConnect = p.connect();
-
+    Manager man;
     string ans;
     while (!isConnect) {
         cout << "Can't connect to graphics" << endl;
@@ -35,17 +35,17 @@ int main() {
         }
     }
 
-    Manager::gameLoop();//fix what that need to be
+    //fix what that need to be
 
     try {
         char msgToGraphics[1024];
-        std::string chessboard = "rnbqkbnrpppppppp############################PPPPPPPPRNBQKBNR";
+        std::string chessboard = "rnbqkbnrpppppppp############################PPPPPPPPRNBQKBNR"; // like startgame in mangager
 
         // Initialize the board
-        board Board(chessboard)  ; // need to Board(const std::string& boardData);
+       
         Board chess = Board(chessboard);
-        board.setBoard("64");//like 44
-        strcpy_s(msgToGraphics, board.toString().c_str()); // Convert board to string
+        man.gameLoop(chess);
+        strcpy_s(msgToGraphics, chess.toString().c_str()); // Convert board to string
 
         p.sendMessageToGraphics(msgToGraphics); // Send the board string
 
@@ -56,7 +56,7 @@ int main() {
             std::string to = msgFromGraphics.substr(2, 2);
             try
             {
-                board.movePiece(from, to);
+                chess.movePiece(from, to);
                 strcpy_s(msgToGraphics, "1"); // Success
             }
             catch (const std::exception& e) {

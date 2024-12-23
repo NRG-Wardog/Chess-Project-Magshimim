@@ -1,5 +1,5 @@
 #include "Manager.h"
-#include "board.h"
+#include "Board.h"
 #include "pieces.h"
 #include <iostream>
 
@@ -20,10 +20,10 @@ void Manager::startGame()
         std::string initialBoard =
             "RNBQKBNR"
             "PPPPPPPP"
-            "........"
-            "........"
-            "........"
-            "........"
+            "########"
+            "########"
+            "########"
+            "########"
             "pppppppp"
             "rnbqkbnr";
 
@@ -83,12 +83,12 @@ void Manager::displayBoard(Board _chessBoard)
   }
 }
 
-void Manager::gameLoop()
+void Manager::gameLoop(Board& board)
 {
     startGame();
     while (isGameOver() == false)
     {
-        Piece* selectedPiece = board.getSymbol(); // what is board?
+        Piece* selectedPiece = board.getSymbol(); // what is position
         if (selectedPiece == nullptr) {
             throw std::invalid_argument("No piece at the selected position");
         }
