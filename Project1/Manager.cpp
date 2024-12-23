@@ -13,27 +13,7 @@ Manager::Manager() : isWhiteTurn(true)
 
 Manager::~Manager() {}
 
-void Manager::startGame()
-{
-    try {
 
-        std::string initialBoard =
-            "RNBQKBNR"
-            "PPPPPPPP"
-            "########"
-            "########"
-            "########"
-            "########"
-            "pppppppp"
-            "rnbqkbnr";
-
-        Board chessBoard(initialBoard);
-    }
-    catch (const std::exception& e)
-    {
-        std::cerr << "Error initializing the game: " << e.what() << std::endl;
-    }
-}
 
 bool Manager::validateMove(Piece* piece, std::string& newPosition)
 {
@@ -85,10 +65,20 @@ void Manager::displayBoard(Board _chessBoard)
 
 void Manager::gameLoop(Board& board)
 {
-    startGame();
+    Piece* p;
+    
+    
+    
+    
+    
+    std::string position = p->getPosition();
+
+
+    
     while (isGameOver() == false)
     {
-        Piece* selectedPiece = board.getSymbol(); // what is position
+
+        Piece* selectedPiece = board.getSymbol(position); 
         if (selectedPiece == nullptr) {
             throw std::invalid_argument("No piece at the selected position");
         }
@@ -105,8 +95,7 @@ void Manager::gameLoop(Board& board)
         }
         
         movePiece(selectedPiece, newPosition);
-        board.getBoard(); // [][] = selectedPiece; what is board??
-        // board.getBoard() //[][] = nullptr;
+        
 
         if (isCheck() == true)
         {
