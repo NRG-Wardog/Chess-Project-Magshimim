@@ -39,10 +39,12 @@ int main() {
 
     try {
         char msgToGraphics[1024];
+        std::string chessboard = "rnbqkbnrpppppppp############################PPPPPPPPRNBQKBNR";
 
         // Initialize the board
-        Board board; // need to Board(const std::string& boardData);
-        board.setBoard();//like 44
+        board Board(chessboard)  ; // need to Board(const std::string& boardData);
+        Board chess = Board(chessboard);
+        board.setBoard("64");//like 44
         strcpy_s(msgToGraphics, board.toString().c_str()); // Convert board to string
 
         p.sendMessageToGraphics(msgToGraphics); // Send the board string
