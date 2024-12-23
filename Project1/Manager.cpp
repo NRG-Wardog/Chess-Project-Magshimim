@@ -8,7 +8,7 @@
 #define START_OF_NUM 1
 
 
-Manager::Manager() : isWhiteTurn(true) 
+Manager::Manager() : _isWhiteTurn(true) 
 {}
 
 Manager::~Manager() {}
@@ -33,7 +33,11 @@ bool Manager::isCheck()
 
 void Manager::resetGame()
 {
-    startGame();
+    std::string _chessboard = "rnbqkbnrpppppppp############################PPPPPPPPRNBQKBNR"; // like startgame in mangager
+
+
+    Board _chess = Board(_chessboard);
+    gameLoop(_chess);
 }
 
 bool Manager::isGameOver()
@@ -71,7 +75,7 @@ void Manager::gameLoop(Board& board)
     
     
     
-    std::string position = p->getPosition();
+    std::string position;
 
 
     
@@ -80,18 +84,18 @@ void Manager::gameLoop(Board& board)
 
         Piece* selectedPiece = board.getSymbol(position); 
         if (selectedPiece == nullptr) {
-            throw std::invalid_argument("No piece at the selected position");
+            throw MoveException(MOVE_INVALID_SOURCE_EMPTY);
         }
 
-        if ((isWhiteTurn && selectedPiece->getColor() != 'w') ||
-            (!isWhiteTurn && selectedPiece->getColor() != 'b')) {
-            throw std::invalid_argument("It's not your turn");
+        if ((_isWhiteTurn && selectedPiece->getColor() != 'w') ||
+            (!_isWhiteTurn && selectedPiece->getColor() != 'b')) {
+            throw MoveException(MOVE_INVALID_TURN);
         }
 
         std::string msgFromGraphics = pipe.getMessageFromGraphics();
         std::string newPosition = msgFromGraphics.substr(2, 2);
         if (!validateMove(selectedPiece, newPosition)) {
-            throw std::invalid_argument("Invalid move for the selected piece");
+            throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);
         }
         
         movePiece(selectedPiece, newPosition);
@@ -99,7 +103,7 @@ void Manager::gameLoop(Board& board)
 
         if (isCheck() == true)
         {
-            throw MoveException::createException(3);
+            throw MoveException(MOVE_VALID_CHECK);
             //  only king can move
         }
         

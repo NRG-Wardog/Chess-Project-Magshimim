@@ -12,7 +12,8 @@
 #define MOVE_INVALID_OUT_OF_BOUNDS 5      // 5 – Invalid move, indices of the squares are not valid
 #define MOVE_INVALID_ILLEGAL_PIECE_MOVE 6 // 6 – Invalid move, illegal move for the piece
 #define MOVE_INVALID_IDENTICAL_SQUARES 7  // 7 – Invalid move, source and target squares are identical
-#define MOVE_VALID_CHECKMATE 8            // 8 – Valid move, caused checkmate
+#define MOVE_INVALID_TURN 8               // 8 - Invalid move, player cant use his pieces in opponent's turn 
+#define MOVE_VALID_CHECKMATE 9           // 9 – Valid move, caused checkmate
 
 
 
@@ -52,6 +53,8 @@ public:
             return "Invalid move. Illegal move for the piece.";
         case MOVE_INVALID_IDENTICAL_SQUARES:
             return "Invalid move. Source and target squares are identical.";
+        case MOVE_INVALID_TURN:
+            return "It's not your turn";
         case MOVE_VALID_CHECKMATE:
             return "Valid move. Checkmate!";
         default:

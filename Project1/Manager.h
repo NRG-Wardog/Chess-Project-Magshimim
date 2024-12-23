@@ -9,7 +9,7 @@
 
 class Manager {
 private:
-    bool isWhiteTurn;
+    bool _isWhiteTurn;
     Pipe pipe;
 
 public:
@@ -17,8 +17,7 @@ public:
     Manager();
     
     ~Manager();
-    
-    void startGame(); 
+   
     bool validateMove(Piece* piece, std::string& newPosition);
     void movePiece(Piece* piece, std::string& newPosition); 
     bool isCheck(); 
