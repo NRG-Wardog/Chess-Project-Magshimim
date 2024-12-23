@@ -1,4 +1,4 @@
-#include "pieces.h"
+#include "Pieces.h"
 #include <iostream>
 #include <stdexcept>
 

@@ -4,6 +4,19 @@
 #include <exception>
 #include <string>
 
+#define MOVE_VALID 0                      // 0 – Valid move
+#define MOVE_VALID_CHECK 1                // 1 – Valid move, caused a check on the opponent
+#define MOVE_INVALID_SOURCE_EMPTY 2       // 2 – Invalid move, source square does not contain the current player's piece
+#define MOVE_INVALID_TARGET_OCCUPIED 3    // 3 – Invalid move, target square is occupied by the current player's piece
+#define MOVE_INVALID_CAUSES_SELF_CHECK 4  // 4 – Invalid move, would cause a check on the current player
+#define MOVE_INVALID_OUT_OF_BOUNDS 5      // 5 – Invalid move, indices of the squares are not valid
+#define MOVE_INVALID_ILLEGAL_PIECE_MOVE 6 // 6 – Invalid move, illegal move for the piece
+#define MOVE_INVALID_IDENTICAL_SQUARES 7  // 7 – Invalid move, source and target squares are identical
+#define MOVE_VALID_CHECKMATE 8            // 8 – Valid move, caused checkmate
+
+
+
+
 class MoveException : public std::exception
 {
 private:
@@ -30,23 +43,23 @@ public:
     // Static method to create exceptions based on predefined cases
     static MoveException createException(int code) {
         switch (code) {
-        case 0:
+        case MOVE_VALID:
             return MoveException(code, "Valid move.");
-        case 1:
+        case MOVE_VALID_CHECK:
             return MoveException(code, "Valid move. Check caused on the opponent.");
-        case 2:
+        case MOVE_INVALID_SOURCE_EMPTY:
             return MoveException(code, "Invalid move. The source square does not contain the current player's piece.");
-        case 3:
+        case MOVE_INVALID_TARGET_OCCUPIED:
             return MoveException(code, "Invalid move. The target square contains the current player's piece.");
-        case 4:
+        case MOVE_INVALID_CAUSES_SELF_CHECK:
             return MoveException(code, "Invalid move. The move would cause a check on the current player.");
-        case 5:
+        case MOVE_INVALID_OUT_OF_BOUNDS:
             return MoveException(code, "Invalid move. The square indices are not valid.");
-        case 6:
+        case MOVE_INVALID_ILLEGAL_PIECE_MOVE:
             return MoveException(code, "Invalid move. Illegal move for the piece.");
-        case 7:
+        case MOVE_INVALID_IDENTICAL_SQUARES:
             return MoveException(code, "Invalid move. Source and target squares are identical.");
-        case 8:
+        case MOVE_VALID_CHECKMATE:
             return MoveException(code, "Valid move. Checkmate!");
         default:
             return MoveException(-1, "Unknown move error.");
