@@ -21,14 +21,12 @@ class MoveException : public std::exception
 {
 private:
     int errorCode;        // Code for the specific error
-    std::string message;  // Error message description
+   
 
 public:
     // Constructor
-    MoveException(int code, const std::string& msg): errorCode(code),message(msg)
-    {
-        createException(errorCode);
-    }
+    MoveException(int code): errorCode(code)
+    {}
 
     // Get the error code
     int getErrorCode() const {
@@ -37,32 +35,27 @@ public:
 
     // Override the what() method to provide an error message
     const char* what() const noexcept override {
-        return message.c_str();
-    }
-
-    // Static method to create exceptions based on predefined cases
-    static MoveException createException(int code) {
-        switch (code) {
+        switch (errorCode) {
         case MOVE_VALID:
-            return MoveException(code, "Valid move.");
+            return "Valid move.";
         case MOVE_VALID_CHECK:
-            return MoveException(code, "Valid move. Check caused on the opponent.");
+            return "Valid move. Check caused on the opponent.";
         case MOVE_INVALID_SOURCE_EMPTY:
-            return MoveException(code, "Invalid move. The source square does not contain the current player's piece.");
+            return "Invalid move. The source square does not contain the current player's piece.";
         case MOVE_INVALID_TARGET_OCCUPIED:
-            return MoveException(code, "Invalid move. The target square contains the current player's piece.");
+            return "Invalid move. The target square contains the current player's piece.";
         case MOVE_INVALID_CAUSES_SELF_CHECK:
-            return MoveException(code, "Invalid move. The move would cause a check on the current player.");
+            return "Invalid move. The move would cause a check on the current player.";
         case MOVE_INVALID_OUT_OF_BOUNDS:
-            return MoveException(code, "Invalid move. The square indices are not valid.");
+            return "Invalid move. The square indices are not valid.";
         case MOVE_INVALID_ILLEGAL_PIECE_MOVE:
-            return MoveException(code, "Invalid move. Illegal move for the piece.");
+            return "Invalid move. Illegal move for the piece.";
         case MOVE_INVALID_IDENTICAL_SQUARES:
-            return MoveException(code, "Invalid move. Source and target squares are identical.");
+            return "Invalid move. Source and target squares are identical.";
         case MOVE_VALID_CHECKMATE:
-            return MoveException(code, "Valid move. Checkmate!");
+            return "Valid move. Checkmate!";
         default:
-            return MoveException(-1, "Unknown move error.");
+            return "Unknown move error.";
         }
     }
 };
