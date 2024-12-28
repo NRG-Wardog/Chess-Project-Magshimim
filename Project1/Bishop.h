@@ -1,7 +1,7 @@
 #ifndef BISHOP_H
 #define BISHOP_H
 
-#include "pieces.h"
+#include "Piece.h"
 #include <cmath> // For std::abs
 #include <string>
 

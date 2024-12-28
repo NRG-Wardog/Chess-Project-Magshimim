@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-#include "pieces.h"
+#include "Piece.h"
 
 #define CHESS_SIZE 8
 

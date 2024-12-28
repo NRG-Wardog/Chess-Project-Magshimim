@@ -21,7 +21,12 @@ void Rook::move(const std::string& newPosition) {
 
 bool Rook::canMove(const std::string& newPosition) const {
     // Validate position format
+<<<<<<< HEAD
     if (newPosition.size() != 2 || newPosition[ROW] < START_OF_ABC || newPosition[ROW] > CHESS_LETTER || newPosition[COL] < START_OF_NUM_AS_CHAR || newPosition[COL] > CHESS_SIZE_AS_CHAR) {
+=======
+    if (newPosition.size() != 2 || newPosition[ROW] < START_OF_ABC || newPosition[ROW] > CHESS_LETTER || newPosition[COL] < START_OF_NUM_AS_CHAR || newPosition[COL] > CHESS_SIZE_AS_CHAR) 
+    {
+>>>>>>> f7d7c4ba3e9efaace66ef53ed71b1299985547a9
         throw MoveException(MOVE_INVALID_OUT_OF_BOUNDS); // Invalid position indices
     }
 

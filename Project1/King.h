@@ -4,7 +4,7 @@
 #include <stdexcept>
 
 #include "board.h"
-#include "pieces.h"
+#include "Piece.h"
 
 class King : public Piece {
 public:
