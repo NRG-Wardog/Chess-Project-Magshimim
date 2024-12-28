@@ -4,12 +4,12 @@
 
 #include "Bishop.h"
 #include "King.h"
-//#include "Knight.h"
+#include "Knight.h"
 #include "Pwn.h"
-//#include "Queen.h"
+#include "Queen.h"
 #include "Rook.h"
 
-#define START_OF_ABC 'a'
+#define START_OF_BOARD 'a'
 #define START_OF_NUM 1
 #define WHITE 'w'
 #define BLACK 'b'
@@ -38,7 +38,7 @@ Piece* Board::getSymbol(std::string& pos) const
     if (pos.size() != 2 || pos[0] < 'a' || pos[0] > 'h' || pos[1] < '1' || pos[1] > '8') {
         throw std::runtime_error("Invalid chessboard position format.");
     }
-    auto col = pos[0] - START_OF_ABC;
+    auto col = pos[0] - START_OF_BOARD;
     auto row = pos[1] - '1';
     return _board[col][row];
 }
@@ -53,7 +53,7 @@ void Board::setBoard(const std::string& boardData)
     {
         for (auto col = 0; col < CHESS_SIZE; ++col)
         {
-            std::string pos = std::string(1, START_OF_ABC + col) + std::to_string(row + START_OF_NUM);
+            std::string pos = std::string(1, START_OF_BOARD + col) + std::to_string(row + START_OF_NUM);
             char pieceChar = boardData[row * CHESS_SIZE + col];
             char color = WHITE;
             if (std::isupper(pieceChar))
@@ -71,16 +71,18 @@ void Board::setBoard(const std::string& boardData)
 	        case KING:
                 _board[row][col] = new King(color, pos);
                 break;
-	        /*case QUEEN:
+	        case QUEEN:
                 _board[row][col] = new Queen(color, pos);
                 break;
 	        case KNIGHT:
-                _board[row][col] = new Knight(color, pos);*/
+                _board[row][col] = new Knight(color, pos);
                 break;
             case BISHOP:
                 _board[row][col] = new Bishop(color, pos);
+                break;
 	        case EMPTY:
                 _board[row][col] = nullptr;
+                break;
 	        default:
                 throw std::runtime_error("Invalid piece character '" + std::string(1, pieceChar) + "' at position: " + pos);
 	        }

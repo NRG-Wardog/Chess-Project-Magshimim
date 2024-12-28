@@ -20,7 +20,7 @@ char Piece::getColor() const
 
 void Piece::setPosition(const std::string& pos)
 {
-	if (pos[0]<'a' || pos[0] > 'z' || pos[1]>9 || pos[1] < 0)
+	if (pos[ROW]< START_OF_BOARD || pos[ROW] > CHESS_END_OF_BOARD || pos[COL]> END_OF_NUM_BOARD || pos[COL] < START_OF_NUM_BOARD)
 	{
 		throw std::runtime_error("Invalid board data size. Expected 64 characters.");
 	}

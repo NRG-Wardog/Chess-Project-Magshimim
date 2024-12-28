@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "MoveException.h"
-#define START_OF_ABC 'a'
+#define START_OF_BOARD 'a'
 #define START_OF_NUM 1
 
 

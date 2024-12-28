@@ -6,7 +6,7 @@
 Rook::Rook(char col, const std::string& pos)
     : Piece(col, pos)
 {
-    if (pos.size() != 2 || pos[ROW] < START_OF_ABC || pos[ROW] > CHESS_LETTER || pos[COL] < START_OF_NUM_AS_CHAR || pos[COL] > CHESS_SIZE_AS_CHAR) {
+    if (pos.size() != 2 || pos[ROW] < START_OF_BOARD || pos[ROW] > CHESS_END_OF_BOARD || pos[COL] < START_OF_NUM_AS_CHAR || pos[COL] > CHESS_SIZE_AS_CHAR) {
         throw MoveException(MOVE_INVALID_OUT_OF_BOUNDS); // Invalid position indices
     }
 }
@@ -21,7 +21,7 @@ void Rook::move(const std::string& newPosition) {
 
 bool Rook::canMove(const std::string& newPosition) const {
     // Validate position format
-    if (newPosition.size() != 2 || newPosition[ROW] < START_OF_ABC || newPosition[ROW] > CHESS_LETTER || newPosition[COL] < START_OF_NUM_AS_CHAR || newPosition[COL] > CHESS_SIZE_AS_CHAR) 
+    if (newPosition.size() != 2 || newPosition[ROW] < START_OF_BOARD || newPosition[ROW] > CHESS_END_OF_BOARD || newPosition[COL] < START_OF_NUM_AS_CHAR || newPosition[COL] > CHESS_SIZE_AS_CHAR)
     {
         throw MoveException(MOVE_INVALID_OUT_OF_BOUNDS); // Invalid position indices
     }

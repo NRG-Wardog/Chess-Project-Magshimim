@@ -29,7 +29,7 @@ bool King::isAttacked(const Board& currentBoard)
                 // Check if the opposing piece can move to the king's position
                 std::string kingPos = std::string(1, kingCol) + std::to_string(kingRow + 1);
                 // Validate position before calling canMove
-                if (kingPos.size() != 2 || kingPos[ROW] < START_OF_ABC || kingPos[ROW] > CHESS_LETTER || kingPos[COL] < START_OF_NUM_AS_CHAR || kingPos[COL] > CHESS_SIZE_AS_CHAR) {
+                if (kingPos.size() != 2 || kingPos[ROW] < START_OF_BOARD || kingPos[ROW] > CHESS_END_OF_BOARD || kingPos[COL] < START_OF_NUM_AS_CHAR || kingPos[COL] > CHESS_SIZE_AS_CHAR) {
                     throw MoveException(MOVE_INVALID_OUT_OF_BOUNDS); // Invalid position
                 }
                 if (piece->canMove(kingPos)) {
@@ -46,7 +46,7 @@ bool King::canMove(const std::string& newPosition) const
 {
     // Validate newPosition format
     if (newPosition.size() != 2 ||
-        newPosition[ROW] < START_OF_ABC || newPosition[ROW] > CHESS_LETTER ||
+        newPosition[ROW] < START_OF_BOARD || newPosition[ROW] > CHESS_END_OF_BOARD ||
         newPosition[COL] < START_OF_NUM_AS_CHAR || newPosition[COL] > CHESS_SIZE_AS_CHAR) {
         throw MoveException(MOVE_INVALID_OUT_OF_BOUNDS); // Invalid position indices
     }
