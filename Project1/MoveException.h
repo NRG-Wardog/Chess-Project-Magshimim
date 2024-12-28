@@ -1,6 +1,5 @@
 #ifndef MOVE_EXCEPTION_H
 #define MOVE_EXCEPTION_H
-#include "MoveStatus.h"
 #include <exception>
 #include <string>
 

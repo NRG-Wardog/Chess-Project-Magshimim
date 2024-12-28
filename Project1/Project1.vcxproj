@@ -133,7 +133,6 @@
     <ClInclude Include="Knight.h" />
     <ClInclude Include="Manager.h" />
     <ClInclude Include="MoveException.h" />
-    <ClInclude Include="MoveStatus.h" />
     <ClInclude Include="Piece.h" />
     <ClInclude Include="Pipe.h" />
     <ClInclude Include="Pwn.h" />

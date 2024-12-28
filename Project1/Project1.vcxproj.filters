@@ -33,9 +33,6 @@
     <ClInclude Include="MoveException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MoveStatus.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Piece.h">
       <Filter>Header Files</Filter>
     </ClInclude>
