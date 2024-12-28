@@ -47,7 +47,6 @@ void Manager::resetGame()
 
 bool Manager::isGameOver()
 {
-    //return king.isAttacked() && !king.canMove();
     return false;
 }
 
@@ -75,18 +74,21 @@ void Manager::displayBoard(Board _chessBoard)
 void Manager::gameLoop(std::string strBoard)
 {
     char msgToGraphics[1024];
-    createBoard(strBoard);
-    strcpy_s(msgToGraphics, _board.toString().c_str());
+    //createBoard(strBoard);
+    //strcpy_s(msgToGraphics, strBoard.c_str());
+    //_p.sendMessageToGraphics(msgToGraphics);
+    //std::string msgFromGraphics = _p.getMessageFromGraphics();
+    strcpy_s(msgToGraphics, "rnbkqbnrpppppppp################################PPPPPPPPRNBKQBNR0"); // just example...
+
     _p.sendMessageToGraphics(msgToGraphics);
     std::string msgFromGraphics = _p.getMessageFromGraphics();
-
     while (isGameOver() == false && msgFromGraphics != "quit")
     {
+        /*Receives 5 bytes; Message: "e2e4"*/
         try {
-            std::cout << msgFromGraphics;
-            std::string from = msgFromGraphics;
-            std::string to = msgFromGraphics;
-
+            std::string from = msgFromGraphics.substr(29,31);
+            std::string to = msgFromGraphics.substr(32, 34);
+            std::cout << from << "," << to;
             Piece* selectedPiece = _board.getSymbol(from);
             if (selectedPiece == nullptr) 
             {
@@ -116,12 +118,13 @@ void Manager::gameLoop(std::string strBoard)
                 bool validateMove(Piece * piece, int x, int y);
                 strcpy_s(msgToGraphics, sizeof(msgToGraphics), "0");
             }
-
+            msgToGraphics[0] = (char)(e.what());
+            msgToGraphics[1] = 0;
             std::cerr << e.what() << std::endl;
             
         }
-        
-        
+        std::string msgFromGraphics = _p.getMessageFromGraphics();
+        std::cout << msgFromGraphics;
     }
 }
 

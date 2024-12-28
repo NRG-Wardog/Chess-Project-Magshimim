@@ -109,8 +109,8 @@ std::string Board::toString() const {
                 boardString += '#'; 
             }
             else {
-                std::cout << _board[row][col]->getType();
-                char pieceType = (_board[row][col]->getType())[0]; //bug idk why
+                std::string type = _board[row][col]->getType();
+                char pieceType = type[0]; //bug idk why
                 if (_board[row][col]->getColor() == 'w') {
                     boardString += pieceType; 
                 }

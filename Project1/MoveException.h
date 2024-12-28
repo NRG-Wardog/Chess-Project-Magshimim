@@ -18,16 +18,16 @@ enum Status {
 };
 
 
-#define MOVE_VALID_STR "Valid move."
-#define MOVE_VALID_CHECK_STR "Valid move. Check caused on the opponent."
-#define MOVE_INVALID_SOURCE_EMPTY_STR "Invalid move. The source square does not contain the current player's piece."
-#define MOVE_INVALID_TARGET_OCCUPIED_STR "Invalid move. The target square contains the current player's piece."
-#define MOVE_INVALID_CAUSES_SELF_CHECK_STR "Invalid move. The move would cause a check on the current player."
-#define MOVE_INVALID_OUT_OF_BOUNDS_STR "Invalid move. The square indices are not valid."
-#define MOVE_INVALID_ILLEGAL_PIECE_MOVE_STR "Invalid move. Illegal move for the piece."
-#define MOVE_INVALID_IDENTICAL_SQUARES_STR "Invalid move. Source and target squares are identical."
-#define MOVE_INVALID_TURN_STR "It's not your turn"
-#define MOVE_VALID_CHECKMATE_STR "Valid move. Checkmate!"
+#define MOVE_VALID_STR "0"
+#define MOVE_VALID_CHECK_STR "1"
+#define MOVE_INVALID_SOURCE_EMPTY_STR "2"
+#define MOVE_INVALID_TARGET_OCCUPIED_STR "3"
+#define MOVE_INVALID_CAUSES_SELF_CHECK_STR "4"
+#define MOVE_INVALID_OUT_OF_BOUNDS_STR "5"
+#define MOVE_INVALID_ILLEGAL_PIECE_MOVE_STR "6"
+#define MOVE_INVALID_IDENTICAL_SQUARES_STR "7"
+#define MOVE_INVALID_TURN_STR "8"
+#define MOVE_VALID_CHECKMATE_STR "9"
 #define UNKOWN_ERROR "Unknown move error."
 
 
