@@ -40,12 +40,12 @@ int main() {
 
     try {
         char msgToGraphics[1024];
-        std::string chessboard = "rnbqkbnrpppppppp################################PPPPPPPPRNBQKBNR"; 
-        std::cout << "Size of chessboard: " << chessboard.size() << std::endl;
+        std::string strBoard = "rnbqkbnrpppppppp############################PPPPPPPPRNBQKBNR1";
+        std::cout << "Size of chessboard: " << strBoard.size() << std::endl;
 
         // Initialize the board
 
-        Board board = Board(chessboard);
+        Board board = Board(strBoard.substr(0, 64));
         strcpy_s(msgToGraphics, board.toString().c_str());
         p.sendMessageToGraphics(msgToGraphics);
         man.gameLoop(board);

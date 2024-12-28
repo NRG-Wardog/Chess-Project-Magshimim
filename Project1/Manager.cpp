@@ -31,11 +31,27 @@ bool Manager::isCheck()
     return false;
 }
 
+void Manager::sendBoard(Board * board, std::string strBoard)
+{
+
+    bool startPlayer = WHITE_TURN;
+//TODO: remember to create a board only with 64 chars because we dont need 65 char for creating the pieces in the board 65th char points to white or black
+    
+    if (strBoard[64] != 0)
+    {
+        startPlayer = BLACK_TURN;
+    }
+
+
+    strBoard = strBoard.substr(0,64);
+    board = new Board(strBoard);
+}
+
 void Manager::resetGame()
 {
     std::string _chessboard = "rnbqkbnrpppppppp############################PPPPPPPPRNBQKBNR"; // like startgame in mangager
 
-
+    //need to fix the logic of the funciton
     Board _chess = Board(_chessboard);
     gameLoop(_chess);
 }
@@ -70,7 +86,8 @@ void Manager::displayBoard(Board _chessBoard)
 void Manager::gameLoop(Board& board)
 {
     char msgToGraphics[1024];
-
+    
+    
     std::string msgFromGraphics = _p.getMessageFromGraphics();
 
     while (isGameOver() == false && msgFromGraphics != "quit")

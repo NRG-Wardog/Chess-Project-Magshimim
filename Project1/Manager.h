@@ -1,6 +1,9 @@
 #ifndef MANAGER_H
 #define MANAGER_H
 
+#define WHITE_TURN true
+#define BLACK_TURN !true
+
 #include "board.h"
 #include "King.h"
 #include "Pipe.h"
@@ -11,6 +14,8 @@ class Manager {
 private:
     bool _isWhiteTurn;
     Pipe _p;
+
+    void sendBoard(Board*, std::string);
 
 public:
     
