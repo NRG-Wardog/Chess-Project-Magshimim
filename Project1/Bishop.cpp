@@ -17,12 +17,12 @@ bool Bishop::canMove(const std::string& newPosition) const
     // Check for valid indices
     if (currentRow < 0 || currentRow >= 8 || currentCol < 0 || currentCol >= 8 ||
         newRow < 0 || newRow >= 8 || newCol < 0 || newCol >= 8) {
-        throw MoveException::createException(5); // Invalid indices
+        throw MoveException(MOVE_INVALID_OUT_OF_BOUNDS); // Invalid indices
     }
 
     // Check if the move is diagonal
     if (std::abs(newRow - currentRow) != std::abs(newCol - currentCol)) {
-        throw MoveException::createException(6); // Illegal move for the piece
+        throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE); // Illegal move for the piece
     }
 
     return true;
@@ -31,7 +31,7 @@ bool Bishop::canMove(const std::string& newPosition) const
 void Bishop::move(const std::string& newPosition)
 {
     if (!canMove(newPosition)) {
-        throw MoveException::createException(6); // Illegal move for the piece
+        throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE); // Illegal move for the piece
     }
 
     // Additional checks for the move could go here, e.g., if the move causes a check

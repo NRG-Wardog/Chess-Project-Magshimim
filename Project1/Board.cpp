@@ -162,7 +162,7 @@ void Board::movePiece(const std::string& from, const std::string& to) {
 }
 
 
-bool Board::isPathClear(int fromRow, int fromCol, int toRow, int toCol, const std::string& pieceType) const {
+bool Board::isPathClear(const int fromRow,const int fromCol,const int toRow,const int toCol, const std::string& pieceType) const {
     int rowDiff = toRow - fromRow;
     int colDiff = toCol - fromCol;
 

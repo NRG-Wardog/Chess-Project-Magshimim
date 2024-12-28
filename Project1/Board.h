@@ -26,7 +26,7 @@ public:
     void setBoard(const std::string& boardData);
     std::string toString() const;
     void movePiece(const std::string& from, const std::string& to); 
-    bool isPathClear(int fromRow, int fromCol, int toRow, int toCol, const std::string& pieceType) const;
+    bool isPathClear(const int fromRow, const int fromCol, const int toRow, const int toCol, const std::string& pieceType) const;
 
 
 

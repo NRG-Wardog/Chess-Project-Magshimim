@@ -1,42 +1,42 @@
 #ifndef MOVE_EXCEPTION_H
 #define MOVE_EXCEPTION_H
-
+#include "MoveStatus.h"
 #include <exception>
 #include <string>
 
-#define MOVE_VALID 0                      // 0 – Valid move
-#define MOVE_VALID_CHECK 1                // 1 – Valid move, caused a check on the opponent
-#define MOVE_INVALID_SOURCE_EMPTY 2       // 2 – Invalid move, source square does not contain the current player's piece
-#define MOVE_INVALID_TARGET_OCCUPIED 3    // 3 – Invalid move, target square is occupied by the current player's piece
-#define MOVE_INVALID_CAUSES_SELF_CHECK 4  // 4 – Invalid move, would cause a check on the current player
-#define MOVE_INVALID_OUT_OF_BOUNDS 5      // 5 – Invalid move, indices of the squares are not valid
-#define MOVE_INVALID_ILLEGAL_PIECE_MOVE 6 // 6 – Invalid move, illegal move for the piece
-#define MOVE_INVALID_IDENTICAL_SQUARES 7  // 7 – Invalid move, source and target squares are identical
-#define MOVE_INVALID_TURN 8               // 8 - Invalid move, player cant use his pieces in opponent's turn 
-#define MOVE_VALID_CHECKMATE 9           // 9 – Valid move, caused checkmate
 
-
-
+enum Status {
+    MOVE_VALID,
+    MOVE_VALID_CHECK,
+    MOVE_INVALID_SOURCE_EMPTY,
+    MOVE_INVALID_TARGET_OCCUPIED,
+    MOVE_INVALID_CAUSES_SELF_CHECK,
+    MOVE_INVALID_OUT_OF_BOUNDS,
+    MOVE_INVALID_ILLEGAL_PIECE_MOVE,
+    MOVE_INVALID_IDENTICAL_SQUARES,
+    MOVE_INVALID_TURN,
+    MOVE_VALID_CHECKMATE,
+};
 
 class MoveException : public std::exception
 {
 private:
-    int errorCode;        // Code for the specific error
+    Status _errorCode;        // Code for the specific error
    
 
 public:
     // Constructor
-    MoveException(int code): errorCode(code)
+    MoveException(Status code): _errorCode(code)
     {}
 
     // Get the error code
-    int getErrorCode() const {
-        return errorCode;
+    Status getErrorCode() const {
+        return _errorCode;
     }
 
     // Override the what() method to provide an error message
     const char* what() const noexcept override {
-        switch (errorCode) {
+        switch (_errorCode) {
         case MOVE_VALID:
             return "Valid move.";
         case MOVE_VALID_CHECK:
