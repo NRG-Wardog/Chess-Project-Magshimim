@@ -8,7 +8,7 @@
 #define START_OF_NUM 1
 
 
-Manager::Manager() : _isWhiteTurn(true) 
+Manager::Manager(Pipe p) : _isWhiteTurn(true), _board(),_p(p)
 {}
 
 Manager::~Manager() {}
@@ -31,29 +31,18 @@ bool Manager::isCheck()
     return false;
 }
 
-void Manager::sendBoard(Board * board, std::string strBoard)
+void Manager::createBoard(std::string& strBoard)
 {
-
-    bool startPlayer = WHITE_TURN;
-//TODO: remember to create a board only with 64 chars because we dont need 65 char for creating the pieces in the board 65th char points to white or black
-    
-    if (strBoard[64] != 0)
-    {
-        startPlayer = BLACK_TURN;
-    }
-
-
-    strBoard = strBoard.substr(0,64);
-    board = new Board(strBoard);
+    if (strBoard.size() < 65) { throw std::runtime_error("size of board invalid."); }
+    std::string boardStrFixed = strBoard.substr(0, 64);
+    _isWhiteTurn = strBoard[64] == WHITE_TURN;
+    _board = Board(boardStrFixed);
 }
 
 void Manager::resetGame()
 {
     std::string _chessboard = "rnbqkbnrpppppppp############################PPPPPPPPRNBQKBNR"; // like startgame in mangager
-
-    //need to fix the logic of the funciton
-    Board _chess = Board(_chessboard);
-    gameLoop(_chess);
+    gameLoop(_chessboard);
 }
 
 bool Manager::isGameOver()
@@ -83,11 +72,12 @@ void Manager::displayBoard(Board _chessBoard)
   }
 }
 
-void Manager::gameLoop(Board& board)
+void Manager::gameLoop(std::string strBoard)
 {
     char msgToGraphics[1024];
-    
-    
+    createBoard(strBoard);
+    strcpy_s(msgToGraphics, _board.toString().c_str());
+    _p.sendMessageToGraphics(msgToGraphics);
     std::string msgFromGraphics = _p.getMessageFromGraphics();
 
     while (isGameOver() == false && msgFromGraphics != "quit")
@@ -97,7 +87,7 @@ void Manager::gameLoop(Board& board)
             std::string from = msgFromGraphics;
             std::string to = msgFromGraphics;
 
-            Piece* selectedPiece = board.getSymbol(from);
+            Piece* selectedPiece = _board.getSymbol(from);
             if (selectedPiece == nullptr) 
             {
                 throw MoveException(MOVE_INVALID_SOURCE_EMPTY);
@@ -112,7 +102,7 @@ void Manager::gameLoop(Board& board)
                 throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);
             }
 
-            board.movePiece(from, to);
+            _board.movePiece(from, to);
 
             if (isCheck() == true)
             {

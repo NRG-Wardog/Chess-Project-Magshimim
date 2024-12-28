@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
-
+#include <iostream>
 #include "Piece.h"
 
 #define CHESS_SIZE 8
@@ -20,6 +20,7 @@ class Board
 public:
     
     Board(const std::string& boardData);
+    Board();
     ~Board();    
     Piece* const (&getBoard() const)[CHESS_SIZE][CHESS_SIZE];
     Piece* getSymbol(std::string& pos) const;

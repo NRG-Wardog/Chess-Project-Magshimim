@@ -26,8 +26,3 @@ void Queen::move(const std::string& newPosition) {
     }
     setPosition(newPosition);
 }
-
-
-std::string Queen::getType() const {
-    return "Queen";
-}

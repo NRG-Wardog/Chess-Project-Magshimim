@@ -18,7 +18,7 @@ int main() {
     srand(time_t(NULL));
     Pipe p;
     bool isConnect = p.connect();
-    Manager man;
+    Manager man(p);
     string ans;
     while (!isConnect) {
         cout << "Can't connect to graphics" << endl;
@@ -40,15 +40,12 @@ int main() {
 
     try {
         char msgToGraphics[1024];
-        std::string strBoard = "rnbqkbnrpppppppp############################PPPPPPPPRNBQKBNR1";
+        std::string strBoard = "rnbkqbnrpppppppp################################PPPPPPPPRNBKQBNR1";
         std::cout << "Size of chessboard: " << strBoard.size() << std::endl;
-
         // Initialize the board
 
-        Board board = Board(strBoard.substr(0, 64));
-        strcpy_s(msgToGraphics, board.toString().c_str());
-        p.sendMessageToGraphics(msgToGraphics);
-        man.gameLoop(board);
+        
+        man.gameLoop(strBoard);
          // Convert board to string
     }
     catch (const MoveException& e) {

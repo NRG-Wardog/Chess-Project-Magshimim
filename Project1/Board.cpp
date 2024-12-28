@@ -19,6 +19,16 @@ Board::Board(const std::string& boardData)
     setBoard(boardData);
 }
 
+Board::Board()
+{
+    for (int row = 0; row < CHESS_SIZE; ++row) {
+        for (int col = 0; col < CHESS_SIZE; ++col) {
+            _board[row][col] = nullptr;
+        }
+    }
+}
+
+
 Board::~Board() {
     for (int row = 0; row < CHESS_SIZE; ++row) {
         for (int col = 0; col < CHESS_SIZE; ++col) {
@@ -99,7 +109,8 @@ std::string Board::toString() const {
                 boardString += '#'; 
             }
             else {
-                char pieceType = _board[row][col]->getType()[0]; 
+                std::cout << _board[row][col]->getType();
+                char pieceType = (_board[row][col]->getType())[0]; //bug idk why
                 if (_board[row][col]->getColor() == 'w') {
                     boardString += pieceType; 
                 }

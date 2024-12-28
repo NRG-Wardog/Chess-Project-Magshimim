@@ -1,25 +1,31 @@
 #ifndef MANAGER_H
 #define MANAGER_H
 
-#define WHITE_TURN true
-#define BLACK_TURN !true
+#define WHITE_TURN 0
+#define BLACK_TURN 1
 
-#include "board.h"
+#include "Board.h"
 #include "King.h"
 #include "Pipe.h"
 #include "MoveException.h"
 #include <iostream>
+#include "Piece.h"
+#include <thread>
+#include <string>
+#include <chrono>
+#include <stdexcept>
 
 class Manager {
 private:
     bool _isWhiteTurn;
     Pipe _p;
+    Board _board;
 
-    void sendBoard(Board*, std::string);
+    void createBoard(std::string&);
 
 public:
     
-    Manager();
+    Manager(Pipe);
     
     ~Manager();
    
@@ -29,7 +35,7 @@ public:
     void resetGame(); 
     bool isGameOver(); 
     void displayBoard(Board _chessBoard);
-    void gameLoop(Board& board);
+    void gameLoop(std::string strBoard);
 };
 
 #endif
