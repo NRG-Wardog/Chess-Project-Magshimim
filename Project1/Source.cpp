@@ -41,6 +41,7 @@ int main() {
     try {
         char msgToGraphics[1024];
         std::string chessboard = "rnbqkbnrpppppppp################################PPPPPPPPRNBQKBNR"; // like startgame in mangager
+        std::cout << "Size of chessboard: " << chessboard.size() << std::endl;
 
         // Initialize the board
 

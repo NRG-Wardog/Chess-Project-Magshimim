@@ -8,11 +8,7 @@ King::King(char col, const std::string& pos) : Piece(col, pos) {}
 void King::move(const std::string& newPosition)
 {
     if (!canMove(newPosition)) {
-<<<<<<< HEAD
-        throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE); 
-=======
         throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE); // Invalid move for King
->>>>>>> f7d7c4ba3e9efaace66ef53ed71b1299985547a9
     }
     setPosition(newPosition);
 }
