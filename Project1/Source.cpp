@@ -40,38 +40,16 @@ int main() {
 
     try {
         char msgToGraphics[1024];
-        std::string chessboard = "rnbqkbnrpppppppp################################PPPPPPPPRNBQKBNR"; // like startgame in mangager
+        std::string chessboard = "rnbqkbnrpppppppp################################PPPPPPPPRNBQKBNR"; 
         std::cout << "Size of chessboard: " << chessboard.size() << std::endl;
 
         // Initialize the board
 
         Board board = Board(chessboard);
-     
+        strcpy_s(msgToGraphics, board.toString().c_str());
+        p.sendMessageToGraphics(msgToGraphics);
         man.gameLoop(board);
-        strcpy_s(msgToGraphics, board.toString().c_str()); // Convert board to string
-
-        // TODO: decide if we need it here or in Manager
-
-        //p.sendMessageToGraphics(msgToGraphics); // Send the board string
-
-        //string msgFromGraphics = p.getMessageFromGraphics();
-        //while (msgFromGraphics != "quit") {
-        //    // Parse and execute move
-        //    try {
-        //        std::string from = msgFromGraphics.substr(0, 2);
-        //        std::string to = msgFromGraphics.substr(2, 2);
-        //        board.movePiece(from, to);
-        //        strcpy_s(msgToGraphics, "1"); // Success
-        //    }
-        //    catch (const std::exception& e) {
-        //        bool validateMove(Piece* piece, int x, int y);
-        //        strcpy_s(msgToGraphics, sizeof(msgToGraphics), "0");
-        //        std::cerr << "Error handling move: " << e.what() << std::endl;
-        //    }
-
-        //    p.sendMessageToGraphics(msgToGraphics); // Send result back to graphics
-        //    msgFromGraphics = p.getMessageFromGraphics(); // Get next message
-        //}
+         // Convert board to string
     }
     catch (const MoveException& e) {
         std::cerr << "Error " << e.getErrorCode() << ": " << e.what() << std::endl;

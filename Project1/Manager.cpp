@@ -70,13 +70,15 @@ void Manager::displayBoard(Board _chessBoard)
 void Manager::gameLoop(Board& board)
 {
     char msgToGraphics[1024];
-    std::string msgFromGraphics = pipe.getMessageFromGraphics();
+
+    std::string msgFromGraphics = _p.getMessageFromGraphics();
 
     while (isGameOver() == false && msgFromGraphics != "quit")
     {
         try {
-            std::string from = msgFromGraphics.substr(0, 2);
-            std::string to = msgFromGraphics.substr(2, 2);
+            std::cout << msgFromGraphics;
+            std::string from = msgFromGraphics;
+            std::string to = msgFromGraphics;
 
             Piece* selectedPiece = board.getSymbol(from);
             if (selectedPiece == nullptr) 
@@ -90,34 +92,26 @@ void Manager::gameLoop(Board& board)
             }
 
             if (!validateMove(selectedPiece, to)) {
-                try {
-                    // Simulate throwing the exception
-                    throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);
-                }
-                catch (const MoveException& e) {
-                    // Catch the exception and print its message
-                    std::cerr << "Exception caught: " << e.what() << std::endl;
-                }
+                throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);
             }
 
             board.movePiece(from, to);
 
             if (isCheck() == true)
             {
-                try {
-                  
-                    throw MoveException(MOVE_VALID_CHECK);
-                }
-                catch (const MoveException& e) {
-                  
-                    std::cerr << "Exception caught: " << e.what() << std::endl;
-                }
+                throw MoveException(MOVE_VALID_CHECK);
             }
         }
-        catch (const std::exception& e) {
-            bool validateMove(Piece * piece, int x, int y);
-            strcpy_s(msgToGraphics, sizeof(msgToGraphics), "0");
-            std::cerr << "Error handling move: " << e.what() << std::endl;
+        catch (const std::exception& e) 
+        {
+            if (e.what() == MOVE_VALID_STR || e.what() == MOVE_VALID_CHECK_STR)
+            {
+                bool validateMove(Piece * piece, int x, int y);
+                strcpy_s(msgToGraphics, sizeof(msgToGraphics), "0");
+            }
+
+            std::cerr << e.what() << std::endl;
+            
         }
         
         

@@ -4,12 +4,13 @@
 #include "board.h"
 #include "King.h"
 #include "Pipe.h"
-
+#include "MoveException.h"
+#include <iostream>
 
 class Manager {
 private:
     bool _isWhiteTurn;
-    Pipe pipe;
+    Pipe _p;
 
 public:
     

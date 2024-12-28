@@ -17,6 +17,21 @@ enum Status {
     MOVE_VALID_CHECKMATE,
 };
 
+
+#define MOVE_VALID_STR "Valid move."
+#define MOVE_VALID_CHECK_STR "Valid move. Check caused on the opponent."
+#define MOVE_INVALID_SOURCE_EMPTY_STR "Invalid move. The source square does not contain the current player's piece."
+#define MOVE_INVALID_TARGET_OCCUPIED_STR "Invalid move. The target square contains the current player's piece."
+#define MOVE_INVALID_CAUSES_SELF_CHECK_STR "Invalid move. The move would cause a check on the current player."
+#define MOVE_INVALID_OUT_OF_BOUNDS_STR "Invalid move. The square indices are not valid."
+#define MOVE_INVALID_ILLEGAL_PIECE_MOVE_STR "Invalid move. Illegal move for the piece."
+#define MOVE_INVALID_IDENTICAL_SQUARES_STR "Invalid move. Source and target squares are identical."
+#define MOVE_INVALID_TURN_STR "It's not your turn"
+#define MOVE_VALID_CHECKMATE_STR "Valid move. Checkmate!"
+#define UNKOWN_ERROR "Unknown move error."
+
+
+
 class MoveException : public std::exception
 {
 private:
@@ -37,27 +52,27 @@ public:
     const char* what() const noexcept override {
         switch (_errorCode) {
         case MOVE_VALID:
-            return "Valid move.";
+            return MOVE_VALID_STR;
         case MOVE_VALID_CHECK:
-            return "Valid move. Check caused on the opponent.";
+            return MOVE_VALID_CHECK_STR;
         case MOVE_INVALID_SOURCE_EMPTY:
-            return "Invalid move. The source square does not contain the current player's piece.";
+            return MOVE_INVALID_SOURCE_EMPTY_STR;
         case MOVE_INVALID_TARGET_OCCUPIED:
-            return "Invalid move. The target square contains the current player's piece.";
+            return MOVE_INVALID_TARGET_OCCUPIED_STR;
         case MOVE_INVALID_CAUSES_SELF_CHECK:
-            return "Invalid move. The move would cause a check on the current player.";
+            return MOVE_INVALID_CAUSES_SELF_CHECK_STR;
         case MOVE_INVALID_OUT_OF_BOUNDS:
-            return "Invalid move. The square indices are not valid.";
+            return MOVE_INVALID_OUT_OF_BOUNDS_STR;
         case MOVE_INVALID_ILLEGAL_PIECE_MOVE:
-            return "Invalid move. Illegal move for the piece.";
+            return MOVE_INVALID_ILLEGAL_PIECE_MOVE_STR;
         case MOVE_INVALID_IDENTICAL_SQUARES:
-            return "Invalid move. Source and target squares are identical.";
+            return MOVE_INVALID_IDENTICAL_SQUARES_STR;
         case MOVE_INVALID_TURN:
-            return "It's not your turn";
+            return MOVE_INVALID_TURN_STR;
         case MOVE_VALID_CHECKMATE:
-            return "Valid move. Checkmate!";
+            return MOVE_VALID_CHECKMATE_STR;
         default:
-            return "Unknown move error.";
+            return UNKOWN_ERROR;
         }
     }
 };
