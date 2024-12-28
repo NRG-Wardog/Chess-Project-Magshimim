@@ -1,6 +1,6 @@
 #include "Manager.h"
 #include "Board.h"
-#include "pieces.h"
+#include "Piece.h"
 #include <iostream>
 
 #include "MoveException.h"
@@ -69,43 +69,57 @@ void Manager::displayBoard(Board _chessBoard)
 
 void Manager::gameLoop(Board& board)
 {
-    Piece* p;
-    
-    
-    
-    
-    
-    std::string position;
+    char msgToGraphics[1024];
+    std::string msgFromGraphics = pipe.getMessageFromGraphics();
 
-
-    
-    while (isGameOver() == false)
+    while (isGameOver() == false && msgFromGraphics != "quit")
     {
+        try {
+            std::string from = msgFromGraphics.substr(0, 2);
+            std::string to = msgFromGraphics.substr(2, 2);
 
-        Piece* selectedPiece = board.getSymbol(position); 
-        if (selectedPiece == nullptr) {
-            throw MoveException(MOVE_INVALID_SOURCE_EMPTY);
+            Piece* selectedPiece = board.getSymbol(from);
+            if (selectedPiece == nullptr) 
+            {
+                throw MoveException(MOVE_INVALID_SOURCE_EMPTY);
+            }
+
+            if ((_isWhiteTurn && selectedPiece->getColor() != 'w') ||
+                (!_isWhiteTurn && selectedPiece->getColor() != 'b')) {
+                throw MoveException(MOVE_INVALID_TURN);
+            }
+
+            if (!validateMove(selectedPiece, to)) {
+                try {
+                    // Simulate throwing the exception
+                    throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);
+                }
+                catch (const MoveException& e) {
+                    // Catch the exception and print its message
+                    std::cerr << "Exception caught: " << e.what() << std::endl;
+                }
+            }
+
+            board.movePiece(from, to);
+
+            if (isCheck() == true)
+            {
+                try {
+                  
+                    throw MoveException(MOVE_VALID_CHECK);
+                }
+                catch (const MoveException& e) {
+                  
+                    std::cerr << "Exception caught: " << e.what() << std::endl;
+                }
+            }
         }
-
-        if ((_isWhiteTurn && selectedPiece->getColor() != 'w') ||
-            (!_isWhiteTurn && selectedPiece->getColor() != 'b')) {
-            throw MoveException(MOVE_INVALID_TURN);
-        }
-
-        std::string msgFromGraphics = pipe.getMessageFromGraphics();
-        std::string newPosition = msgFromGraphics.substr(2, 2);
-        if (!validateMove(selectedPiece, newPosition)) {
-            throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);
+        catch (const std::exception& e) {
+            bool validateMove(Piece * piece, int x, int y);
+            strcpy_s(msgToGraphics, sizeof(msgToGraphics), "0");
+            std::cerr << "Error handling move: " << e.what() << std::endl;
         }
         
-        movePiece(selectedPiece, newPosition);
-        
-
-        if (isCheck() == true)
-        {
-            throw MoveException(MOVE_VALID_CHECK);
-            //  only king can move
-        }
         
     }
 }

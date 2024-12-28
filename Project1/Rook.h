@@ -3,7 +3,7 @@
 
 #include <stdexcept>
 
-#include "pieces.h"
+#include "Piece.h"
 
 class Rook : public Piece {
 public:

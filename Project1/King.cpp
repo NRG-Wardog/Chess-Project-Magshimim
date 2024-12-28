@@ -8,7 +8,7 @@ King::King(char col, const std::string& pos) : Piece(col, pos) {}
 void King::move(const std::string& newPosition)
 {
     if (!canMove(newPosition)) {
-        throw MoveException::createException(MOVE_INVALID_ILLEGAL_PIECE_MOVE); // Invalid move for King
+        throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE); // Invalid move for King
     }
     setPosition(newPosition);
 }
@@ -30,7 +30,7 @@ bool King::isAttacked(const Board& currentBoard)
                 std::string kingPos = std::string(1, kingCol) + std::to_string(kingRow + 1);
                 // Validate position before calling canMove
                 if (kingPos.size() != 2 || kingPos[ROW] < START_OF_ABC || kingPos[ROW] > CHESS_LETTER || kingPos[COL] < START_OF_NUM_AS_CHAR || kingPos[COL] > CHESS_SIZE_AS_CHAR) {
-                    throw MoveException::createException(MOVE_INVALID_OUT_OF_BOUNDS); // Invalid position
+                    throw MoveException(MOVE_INVALID_OUT_OF_BOUNDS); // Invalid position
                 }
                 if (piece->canMove(kingPos)) {
                     return true; // King is attacked
@@ -48,7 +48,7 @@ bool King::canMove(const std::string& newPosition) const
     if (newPosition.size() != 2 ||
         newPosition[ROW] < START_OF_ABC || newPosition[ROW] > CHESS_LETTER ||
         newPosition[COL] < START_OF_NUM_AS_CHAR || newPosition[COL] > CHESS_SIZE_AS_CHAR) {
-        throw MoveException::createException(MOVE_INVALID_OUT_OF_BOUNDS); // Invalid position indices
+        throw MoveException(MOVE_INVALID_OUT_OF_BOUNDS); // Invalid position indices
     }
 
     char newCol = newPosition[ROW];

@@ -1,6 +1,7 @@
 #include "Pipe.h"
 #include "Board.h"
 #include "Manager.h"
+#include "Piece.h"
 #include <iostream>
 #include <thread>
 #include <string>
@@ -35,39 +36,41 @@ int main() {
         }
     }
 
-    //fix what that need to be
+
 
     try {
         char msgToGraphics[1024];
-        std::string chessboard = "rnbqkbnrpppppppp############################PPPPPPPPRNBQKBNR"; // like startgame in mangager
+        std::string chessboard = "rnbqkbnrpppppppp################################PPPPPPPPRNBQKBNR"; // like startgame in mangager
 
         // Initialize the board
-       
-        Board chess = Board(chessboard);
-        man.gameLoop(chess);
-        strcpy_s(msgToGraphics, chess.toString().c_str()); // Convert board to string
 
-        p.sendMessageToGraphics(msgToGraphics); // Send the board string
+        Board board = Board(chessboard);
+     
+        man.gameLoop(board);
+        strcpy_s(msgToGraphics, board.toString().c_str()); // Convert board to string
 
-        string msgFromGraphics = p.getMessageFromGraphics();
-        while (msgFromGraphics != "quit") {
-            // Parse and execute move
-            std::string from = msgFromGraphics.substr(0, 2);
-            std::string to = msgFromGraphics.substr(2, 2);
-            try
-            {
-                chess.movePiece(from, to);
-                strcpy_s(msgToGraphics, "1"); // Success
-            }
-            catch (const std::exception& e) {
-                bool validateMove(Piece* piece, int x, int y);
-                strcpy_s(msgToGraphics, sizeof(msgToGraphics), "0");
-                std::cerr << "Error handling move: " << e.what() << std::endl;
-            }
+        // TODO: decide if we need it here or in Manager
 
-            p.sendMessageToGraphics(msgToGraphics); // Send result back to graphics
-            msgFromGraphics = p.getMessageFromGraphics(); // Get next message
-        }
+        //p.sendMessageToGraphics(msgToGraphics); // Send the board string
+
+        //string msgFromGraphics = p.getMessageFromGraphics();
+        //while (msgFromGraphics != "quit") {
+        //    // Parse and execute move
+        //    try {
+        //        std::string from = msgFromGraphics.substr(0, 2);
+        //        std::string to = msgFromGraphics.substr(2, 2);
+        //        board.movePiece(from, to);
+        //        strcpy_s(msgToGraphics, "1"); // Success
+        //    }
+        //    catch (const std::exception& e) {
+        //        bool validateMove(Piece* piece, int x, int y);
+        //        strcpy_s(msgToGraphics, sizeof(msgToGraphics), "0");
+        //        std::cerr << "Error handling move: " << e.what() << std::endl;
+        //    }
+
+        //    p.sendMessageToGraphics(msgToGraphics); // Send result back to graphics
+        //    msgFromGraphics = p.getMessageFromGraphics(); // Get next message
+        //}
     }
     catch (const MoveException& e) {
         std::cerr << "Error " << e.getErrorCode() << ": " << e.what() << std::endl;

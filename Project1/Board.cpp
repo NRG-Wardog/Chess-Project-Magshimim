@@ -1,12 +1,12 @@
-#include "board.h"
+#include "Board.h"
 #include <cctype>
 #include <stdexcept>
 
 #include "Bishop.h"
 #include "King.h"
-#include "Knight.h"
+//#include "Knight.h"
 #include "Pwn.h"
-#include "Queen.h"
+//#include "Queen.h"
 #include "Rook.h"
 
 #define START_OF_ABC 'a'
@@ -71,11 +71,11 @@ void Board::setBoard(const std::string& boardData)
 	        case KING:
                 _board[row][col] = new King(color, pos);
                 break;
-	        case QUEEN:
+	        /*case QUEEN:
                 _board[row][col] = new Queen(color, pos);
                 break;
 	        case KNIGHT:
-                _board[row][col] = new Knight(color, pos);
+                _board[row][col] = new Knight(color, pos);*/
                 break;
             case BISHOP:
                 _board[row][col] = new Bishop(color, pos);

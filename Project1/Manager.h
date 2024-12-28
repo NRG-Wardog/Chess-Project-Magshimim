@@ -2,7 +2,6 @@
 #define MANAGER_H
 
 #include "board.h"
-#include "pieces.h"
 #include "King.h"
 #include "Pipe.h"
 
