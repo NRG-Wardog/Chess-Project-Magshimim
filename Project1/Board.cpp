@@ -231,80 +231,18 @@ bool Board::isPathClear(const int fromRow, const int fromCol, const int toRow, c
     int colDiff = toCol - fromCol;
 
     if (pieceType == "Rook") {
-        // Rook moves must be straight: either rowDiff or colDiff is 0
-        if ((rowDiff != 0 && colDiff != 0) || (rowDiff == 0 && colDiff == 0)) {
-            return false;
-        }
-
-        // Determine direction of movement
-        int rowDirection = (rowDiff == 0) ? 0 : rowDiff / abs(rowDiff);
-        int colDirection = (colDiff == 0) ? 0 : colDiff / abs(colDiff);
-
-        // Check path for obstacles
-        int currentRow = fromRow + rowDirection;
-        int currentCol = fromCol + colDirection;
-        while (currentRow != toRow || currentCol != toCol) {
-            if (_board[currentRow][currentCol] != nullptr) {
-                return false; // Path is blocked
-            }
-            currentRow += rowDirection;
-            currentCol += colDirection;
-        }
-        return true; // Path is clear
+        return isStraightPathClear(fromRow, fromCol, toRow, toCol);
     }
     else if (pieceType == "Bishop") {
-        // Bishop moves must be diagonal: abs(rowDiff) == abs(colDiff)
-        if (abs(rowDiff) != abs(colDiff)) return false;
-
-        // Determine direction of movement
-        int rowDirection = rowDiff / abs(rowDiff);
-        int colDirection = colDiff / abs(colDiff);
-
-        // Check path for obstacles
-        int currentRow = fromRow + rowDirection;
-        int currentCol = fromCol + colDirection;
-        while (currentRow != toRow || currentCol != toCol) {
-            if (_board[currentRow][currentCol] != nullptr) {
-                return false; // Path is blocked
-            }
-            currentRow += rowDirection;
-            currentCol += colDirection;
-        }
-        return true; // Path is clear
+        return isDiagonalPathClear(fromRow, fromCol, toRow, toCol);
     }
     else if (pieceType == "Queen") {
-        // Queen moves must be straight or diagonal
+        // Queen combines Rook and Bishop logic
         if (fromRow == toRow || fromCol == toCol) {
-            // Straight-line move (like Rook)
-            int rowDirection = (rowDiff == 0) ? 0 : rowDiff / abs(rowDiff);
-            int colDirection = (colDiff == 0) ? 0 : colDiff / abs(colDiff);
-
-            int currentRow = fromRow + rowDirection;
-            int currentCol = fromCol + colDirection;
-            while (currentRow != toRow || currentCol != toCol) {
-                if (_board[currentRow][currentCol] != nullptr) {
-                    return false; // Path is blocked
-                }
-                currentRow += rowDirection;
-                currentCol += colDirection;
-            }
-            return true; // Path is clear
+            return isStraightPathClear(fromRow, fromCol, toRow, toCol);
         }
         else if (abs(rowDiff) == abs(colDiff)) {
-            // Diagonal move (like Bishop)
-            int rowDirection = rowDiff / abs(rowDiff);
-            int colDirection = colDiff / abs(colDiff);
-
-            int currentRow = fromRow + rowDirection;
-            int currentCol = fromCol + colDirection;
-            while (currentRow != toRow || currentCol != toCol) {
-                if (_board[currentRow][currentCol] != nullptr) {
-                    return false; // Path is blocked
-                }
-                currentRow += rowDirection;
-                currentCol += colDirection;
-            }
-            return true; // Path is clear
+            return isDiagonalPathClear(fromRow, fromCol, toRow, toCol);
         }
         return false; // Invalid move for Queen
     }
@@ -314,7 +252,52 @@ bool Board::isPathClear(const int fromRow, const int fromCol, const int toRow, c
     return false; // Invalid piece type or unsupported path validation
 }
 
+// Helper function to check straight paths (used by Rook and Queen)
+bool Board::isStraightPathClear(const int fromRow, const int fromCol, const int toRow, const int toCol) const {
+    int rowDiff = toRow - fromRow;
+    int colDiff = toCol - fromCol;
 
+    // Determine direction of movement
+    int rowDirection = (rowDiff == 0) ? 0 : rowDiff / abs(rowDiff);
+    int colDirection = (colDiff == 0) ? 0 : colDiff / abs(colDiff);
+
+    // Check path for obstacles
+    int currentRow = fromRow + rowDirection;
+    int currentCol = fromCol + colDirection;
+    while (currentRow != toRow || currentCol != toCol) {
+        if (_board[currentRow][currentCol] != nullptr) {
+            return false; // Path is blocked
+        }
+        currentRow += rowDirection;
+        currentCol += colDirection;
+    }
+    return true; // Path is clear
+}
+
+// Helper function to check diagonal paths (used by Bishop and Queen)
+bool Board::isDiagonalPathClear(const int fromRow, const int fromCol, const int toRow, const int toCol) const {
+    int rowDiff = toRow - fromRow;
+    int colDiff = toCol - fromCol;
+
+    // Diagonal moves must have equal row and column differences
+    if (abs(rowDiff) != abs(colDiff)) return false;
+
+    // Determine direction of movement
+    int rowDirection = rowDiff / abs(rowDiff);
+    int colDirection = colDiff / abs(colDiff);
+
+    // Check path for obstacles
+    int currentRow = fromRow + rowDirection;
+    int currentCol = fromCol + colDirection;
+    while (currentRow != toRow || currentCol != toCol) {
+        if (_board[currentRow][currentCol] != nullptr) {
+            return false; // Path is blocked
+        }
+        currentRow += rowDirection;
+        currentCol += colDirection;
+    }
+    return true; // Path is clear
+}
 
 
 std::ostream& operator<<(std::ostream& os, const Board& board)
