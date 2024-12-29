@@ -171,8 +171,8 @@ void Board::movePiece(const std::string& from, const std::string& to,bool god) {
     // Validate bounds
     if (!god)
     {
-        if (fromRow <= 0 || fromRow > CHESS_SIZE || fromCol <= 0 || fromCol > CHESS_SIZE ||
-            toRow <= 0 || toRow > CHESS_SIZE || toCol <= 0 || toCol > CHESS_SIZE) {
+        if (fromRow <= 0 || fromRow > CHESS_SIZE || fromCol < 0 || fromCol > CHESS_SIZE ||
+            toRow <= 0 || toRow > CHESS_SIZE || toCol < 0 || toCol > CHESS_SIZE) {
             throw MoveException(MOVE_INVALID_OUT_OF_BOUNDS);
         }
 
@@ -269,7 +269,10 @@ bool Board::isStraightPathClear(const int fromRow, const int fromCol, const int 
     // Check path for obstacles
     int currentRow = fromRow + rowDirection;
     int currentCol = fromCol + colDirection;
-    while (currentRow != toRow || currentCol != toCol) {
+    while ((currentRow != toRow || currentCol != toCol)) {
+        if (currentRow == toRow - rowDirection && currentCol == toCol - colDirection) {
+            break; // Stop one square before the target
+        }
         if (_board[currentRow][currentCol] != nullptr) {
             return false; // Path is blocked
         }
@@ -278,6 +281,7 @@ bool Board::isStraightPathClear(const int fromRow, const int fromCol, const int 
     }
     return true; // Path is clear
 }
+
 
 // Helper function to check diagonal paths (used by Bishop and Queen)
 bool Board::isDiagonalPathClear(const int fromRow, const int fromCol, const int toRow, const int toCol) const {
@@ -294,7 +298,10 @@ bool Board::isDiagonalPathClear(const int fromRow, const int fromCol, const int 
     // Check path for obstacles
     int currentRow = fromRow + rowDirection;
     int currentCol = fromCol + colDirection;
-    while (currentRow != toRow || currentCol != toCol) {
+    while ((currentRow != toRow || currentCol != toCol)) {
+        if (currentRow == toRow - rowDirection && currentCol == toCol - colDirection) {
+            break; // Stop one square before the target
+        }
         if (_board[currentRow][currentCol] != nullptr) {
             return false; // Path is blocked
         }
@@ -303,6 +310,7 @@ bool Board::isDiagonalPathClear(const int fromRow, const int fromCol, const int 
     }
     return true; // Path is clear
 }
+
 
 
 std::ostream& operator<<(std::ostream& os, const Board& board)
