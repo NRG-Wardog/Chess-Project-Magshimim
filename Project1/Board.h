@@ -15,6 +15,7 @@
 #define PWN 'p'
 #define EMPTY '#'
 
+
 class Board
 {
 public:

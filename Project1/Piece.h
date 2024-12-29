@@ -14,7 +14,7 @@
 #define CHESS_END_OF_BOARD 'h'
 #define ROW 0
 #define COL 1
-
+#define EAT 'e'
 
 
 

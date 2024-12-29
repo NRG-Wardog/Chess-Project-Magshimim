@@ -33,7 +33,7 @@ bool Pwn::canMove(const std::string& newPosition) const
     int newRow = newPosition[1] - '0';
     char currCol = _position[0];
     int currRow = _position[1]-'0';
-    bool firstVAL = newCol == currCol;
+    bool firstVAL = newCol == currCol || newPosition[2] == EAT;
     bool secondVal = newRow == currRow + direction;
     bool theredVal = newRow == currRow + 2 * direction;
     return (firstVAL && (secondVal || (_firstMove && theredVal)));

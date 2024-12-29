@@ -162,7 +162,7 @@ void Board::movePiece(const std::string& from, const std::string& to) {
     int fromCol = from[0] - 'a';
     int toRow = to[1]-'0';
     int toCol = to[0] - 'a';
-
+    Piece* targetPiece = _board[toRow - 1][toCol];
     // Validate bounds
     if (fromRow < 0 || fromRow >= CHESS_SIZE || fromCol < 0 || fromCol >= CHESS_SIZE ||
         toRow < 0 || toRow >= CHESS_SIZE || toCol < 0 || toCol >= CHESS_SIZE) {
@@ -179,7 +179,20 @@ void Board::movePiece(const std::string& from, const std::string& to) {
     std::string pieceType = piece->getType();
     std::string toPosition = std::string(1, 'a' + toCol) + std::to_string(toRow);
     // Check if the move is valid for the piece
-    if (!piece->canMove(toPosition)) {
+    if (pieceType == "Pwn") {
+        std::string move = " ";
+        if (targetPiece != nullptr)
+        {
+            if (targetPiece->getColor() == piece->getColor()) {
+                throw MoveException(MOVE_INVALID_TARGET_OCCUPIED);
+            }
+            move = "e";
+        }
+        if (!piece->canMove(toPosition + move)) {
+            throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);
+        }
+    }
+    else if (!piece->canMove(toPosition)) {
         throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);
     }
 
@@ -191,7 +204,7 @@ void Board::movePiece(const std::string& from, const std::string& to) {
     }
 
     // Handle capturing
-    Piece* targetPiece = _board[toRow-1][toCol];
+    
     if (targetPiece != nullptr) {
         if (targetPiece->getColor() == piece->getColor()) {
             throw MoveException(MOVE_INVALID_TARGET_OCCUPIED);

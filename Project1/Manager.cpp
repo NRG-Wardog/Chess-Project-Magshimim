@@ -116,10 +116,6 @@ void Manager::gameLoop(std::string strBoard)
             if ((_isWhiteTurn && selectedPiece->getColor() != 'w') ||(!_isWhiteTurn && selectedPiece->getColor() != 'b')) {
                 throw MoveException(MOVE_INVALID_SOURCE_EMPTY);
             }
-            if (!validateMove(selectedPiece, to)) {
-                throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);
-            }
-
             _board.movePiece(from, to);
 
             if (isCheck() == true)
