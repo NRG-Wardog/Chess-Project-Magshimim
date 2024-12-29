@@ -68,7 +68,7 @@ bool King::canMove(const std::string& newPosition) const
     }
 
     char newCol = newPosition[ROW];
-    int newRow = newPosition[COL] - '0'; // Convert '1'-'8' to 1-8
+    int newRow = newPosition[COL] - '0'; 
     char currCol = _position[ROW];
     int currRow = _position[COL] - '0';
 

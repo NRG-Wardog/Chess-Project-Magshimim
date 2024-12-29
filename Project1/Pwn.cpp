@@ -17,7 +17,7 @@ void Pwn::move(const std::string & newPosition)
         _firstMove = false;
     }
     else {
-        throw std::invalid_argument("Invalid move for Pawn");
+        throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);
     }
 }
 

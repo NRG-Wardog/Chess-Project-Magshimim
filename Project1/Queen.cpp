@@ -12,15 +12,16 @@ Queen::Queen(char col, const std::string& pos) : Piece(col,pos)
 * Output: true or false
 */
 bool Queen::canMove(const std::string& newPosition) const {
-    int currentRow = _position[1] - '1'; // Convert '1'-'8' to 0-7
-    int currentCol = _position[0] - 'a'; // Convert 'a'-'h' to 0-7
-    int newRow = newPosition[1] - '1';
+
+    int currentRow = _position[1] - '0';
+    int currentCol = _position[0] - 'a';
+    int newRow = newPosition[1] - '0';
     int newCol = newPosition[0] - 'a';
 
     // Check if the move is straight (like a Rook) or diagonal (like a Bishop)
-    bool straightMove = (currentRow == newRow || currentCol == newCol);
+    
     bool diagonalMove = (std::abs(newRow - currentRow) == std::abs(newCol - currentCol));
-
+    bool straightMove = (currentRow == newRow || currentCol == newCol);
     return straightMove || diagonalMove;
 }
 

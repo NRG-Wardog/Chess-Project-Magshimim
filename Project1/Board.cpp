@@ -117,7 +117,7 @@ std::string Board::toString() const {
     boardString.reserve(CHESS_SIZE * (CHESS_SIZE + 1)); // Reserve space for all rows + newlines
 
     for (int row = CHESS_SIZE - 1; row >= 0 ; --row) {
-        for (int col = CHESS_SIZE - 1; col >= 0; --col) {
+        for (int col = CHESS_SIZE - 1; col>= 0; --col) {
             if (_board[row][col] == nullptr) {
                 boardString += '#';  // Empty square
             }
@@ -158,7 +158,7 @@ std::string Board::toString() const {
 */
 void Board::movePiece(const std::string& from, const std::string& to) {
     // Convert "from" and "to" to row and column indices
-    int fromRow = from[1] - '1';
+    int fromRow = from[1] - '0';
     int fromCol = from[0] - 'a';
     int toRow = to[1]-'0';
     int toCol = to[0] - 'a';
@@ -170,7 +170,7 @@ void Board::movePiece(const std::string& from, const std::string& to) {
     }
 
     // Get the piece at the "from" position
-    Piece* piece = _board[fromRow][fromCol];
+    Piece* piece = _board[fromRow-1][fromCol];
     if (piece == nullptr) {
         throw MoveException(MOVE_INVALID_SOURCE_EMPTY);
     }
@@ -178,7 +178,6 @@ void Board::movePiece(const std::string& from, const std::string& to) {
     // Get the type and color of the piece
     std::string pieceType = piece->getType();
     std::string toPosition = std::string(1, 'a' + toCol) + std::to_string(toRow);
-    std::cout << toPosition;
     // Check if the move is valid for the piece
     if (!piece->canMove(toPosition)) {
         throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);
@@ -187,7 +186,7 @@ void Board::movePiece(const std::string& from, const std::string& to) {
     // Path validation for applicable pieces
     if (pieceType == "Rook" || pieceType == "Bishop" || pieceType == "Queen") {
         if (!isPathClear(fromRow, fromCol, toRow, toCol, pieceType)) {
-            throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);//what that error? like what
+            throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);
         }
     }
 
@@ -201,8 +200,8 @@ void Board::movePiece(const std::string& from, const std::string& to) {
     }
 
     // Perform the move
-    _board[toRow][toCol] = piece;
-    _board[fromRow][fromCol] = nullptr;
+    _board[toRow-1][toCol] = piece;
+    _board[fromRow-1][fromCol] = nullptr;
     piece->setPosition(toPosition);
 }
 
@@ -308,8 +307,8 @@ std::ostream& operator<<(std::ostream& os, const Board& board)
 {
     std::string boardString = "";
     std::vector<std::vector<Piece*>> _board = board.getBoard();
-    for (auto row = 0; row < CHESS_SIZE; ++row) {
-        for (auto col = 0; col < CHESS_SIZE; ++col) {
+    for (auto row = CHESS_SIZE-1; row >= 0; --row) {
+        for (auto col = 0; col < CHESS_SIZE ; ++col) {
             if (_board[row][col] == nullptr) {
                 boardString += '#';  // Empty square
             }

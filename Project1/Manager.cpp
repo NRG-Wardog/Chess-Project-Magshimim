@@ -97,7 +97,6 @@ void Manager::gameLoop(std::string strBoard)
     
     while (isGameOver() == false && msgFromGraphics != "quit")
     {
-        displayBoard();
         try {
             std::string from = msgFromGraphics.substr(0,2);
             std::string to = msgFromGraphics.substr(2, 4);
@@ -147,6 +146,7 @@ void Manager::gameLoop(std::string strBoard)
         }
         std::cout << "\n";
         _isWhiteTurn = !_isWhiteTurn;
+        displayBoard();
         msgFromGraphics = _p.getMessageFromGraphics();
     }
 }

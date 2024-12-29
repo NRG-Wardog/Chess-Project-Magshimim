@@ -8,9 +8,9 @@
 * Output: true or false
 */
 bool Knight::canMove(const std::string& newPosition) const {
-    int currentRow = _position[1] - '1'; 
+    int currentRow = _position[1] - '0'; 
     int currentCol = _position[0] - 'a'; 
-    int newRow = newPosition[1] - '1';
+    int newRow = newPosition[1] - '0';
     int newCol = newPosition[0] - 'a';
 
     // A knight moves in an "L" shape: 2 squares in one direction and 1 in the other

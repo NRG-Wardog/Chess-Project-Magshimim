@@ -9,9 +9,9 @@ Bishop::Bishop(char color, const std::string& position) : Piece(color, position)
 
 bool Bishop::canMove(const std::string& newPosition) const
 {
-    int currentRow = _position[1] - '1'; // Convert '1'-'8' to 0-7
-    int currentCol = _position[0] - 'a'; // Convert 'a'-'h' to 0-7
-    int newRow = newPosition[1] - '1';
+    int currentRow = _position[1] - '0'; 
+    int currentCol = _position[0] - 'a'; 
+    int newRow = newPosition[1] - '0';
     int newCol = newPosition[0] - 'a';
 
     // Check for valid indices
@@ -33,8 +33,6 @@ void Bishop::move(const std::string& newPosition)
     if (!canMove(newPosition)) {
         throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE); // Illegal move for the piece
     }
-
-    // Additional checks for the move could go here, e.g., if the move causes a check
     setPosition(newPosition);
 }
 
