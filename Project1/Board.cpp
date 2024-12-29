@@ -158,62 +158,67 @@ std::string Board::toString() const {
 * Input: string reference from , string reference to.
 * Output: none
 */
-void Board::movePiece(const std::string& from, const std::string& to) {
+void Board::movePiece(const std::string& from, const std::string& to,bool god) {
     // Convert "from" and "to" to row and column indices
     int fromRow = from[1] - '0';
     int fromCol = from[0] - 'a';
     int toRow = to[1]-'0';
     int toCol = to[0] - 'a';
     Piece* targetPiece = _board[toRow - 1][toCol];
-    // Validate bounds
-    if (fromRow <= 0 || fromRow > CHESS_SIZE || fromCol <= 0 || fromCol > CHESS_SIZE ||
-        toRow <= 0 || toRow > CHESS_SIZE || toCol <= 0 || toCol > CHESS_SIZE) {
-        throw MoveException(MOVE_INVALID_OUT_OF_BOUNDS);
-    }
-
-    // Get the piece at the "from" position
-    Piece* piece = _board[fromRow-1][fromCol];
-    if (piece == nullptr) {
-        throw MoveException(MOVE_INVALID_SOURCE_EMPTY);
-    }
-
-    // Get the type and color of the piece
+    Piece* piece = _board[fromRow - 1][fromCol];
     std::string pieceType = piece->getType();
     std::string toPosition = std::string(1, 'a' + toCol) + std::to_string(toRow);
-    // Check if the move is valid for the piece
-    if (pieceType == "Pwn") {
-        std::string move = " ";
-        if (targetPiece != nullptr)
-        {
+    // Validate bounds
+    if (!god)
+    {
+        if (fromRow <= 0 || fromRow > CHESS_SIZE || fromCol <= 0 || fromCol > CHESS_SIZE ||
+            toRow <= 0 || toRow > CHESS_SIZE || toCol <= 0 || toCol > CHESS_SIZE) {
+            throw MoveException(MOVE_INVALID_OUT_OF_BOUNDS);
+        }
+
+        // Get the piece at the "from" position
+        piece = _board[fromRow - 1][fromCol];
+        if (piece == nullptr) {
+            throw MoveException(MOVE_INVALID_SOURCE_EMPTY);
+        }
+
+        // Get the type and color of the piece
+        pieceType = piece->getType();
+        toPosition = std::string(1, 'a' + toCol) + std::to_string(toRow);
+        // Check if the move is valid for the piece
+        if (pieceType == "Pwn") {
+            std::string move = " ";
+            if (targetPiece != nullptr)
+            {
+                if (targetPiece->getColor() == piece->getColor()) {
+                    throw MoveException(MOVE_INVALID_TARGET_OCCUPIED);
+                }
+                move = "e";
+            }
+            if (!piece->canMove(toPosition + move)) {
+                throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);
+            }
+        }
+        else if (!piece->canMove(toPosition)) {
+            throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);
+        }
+
+        // Path validation for applicable pieces
+        if (pieceType == "Rook" || pieceType == "Bishop" || pieceType == "Queen") {
+            if (!isPathClear(fromRow, fromCol, toRow, toCol, pieceType)) {
+                throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);
+            }
+        }
+
+        // Handle capturing
+
+        if (targetPiece != nullptr) {
             if (targetPiece->getColor() == piece->getColor()) {
                 throw MoveException(MOVE_INVALID_TARGET_OCCUPIED);
             }
-            move = "e";
-        }
-        if (!piece->canMove(toPosition + move)) {
-            throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);
+            delete targetPiece; // Remove the captured piece
         }
     }
-    else if (!piece->canMove(toPosition)) {
-        throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);
-    }
-
-    // Path validation for applicable pieces
-    if (pieceType == "Rook" || pieceType == "Bishop" || pieceType == "Queen") {
-        if (!isPathClear(fromRow, fromCol, toRow, toCol, pieceType)) {
-            throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);
-        }
-    }
-
-    // Handle capturing
-    
-    if (targetPiece != nullptr) {
-        if (targetPiece->getColor() == piece->getColor()) {
-            throw MoveException(MOVE_INVALID_TARGET_OCCUPIED);
-        }
-        delete targetPiece; // Remove the captured piece
-    }
-
     // Perform the move
     _board[toRow-1][toCol] = piece;
     _board[fromRow-1][fromCol] = nullptr;

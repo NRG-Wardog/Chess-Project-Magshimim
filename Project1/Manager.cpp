@@ -15,8 +15,6 @@ Manager::Manager(Pipe p,std::string chess) : _p(p),_board(chess)
 
 Manager::~Manager() {}
 
-
-
 /*
 Validates the move.
 Input: Piece pointer piece, string reference newPosition.
@@ -37,12 +35,55 @@ void Manager::movePiece(Piece* piece, std::string& newPosition)
     piece->move(newPosition);
 }
 
-bool Manager::isCheck()
+/*
+func check if the wanted turn is check
+input:how turn is that
+output:true or false
+*/
+bool Manager::isCheck(bool turn)
 {
-    //return king.isAttacked();
-    return false;
-}
+    char kingColor = turn ? 'w' : 'b';
+    // Find the king's position
+    std::string kingPosition;
+    for (int row = 0; row < CHESS_SIZE; ++row) 
+    {
+        for (int col = 0; col < CHESS_SIZE; ++col) 
+        {
+            Piece* piece = _board.getBoard()[row][col];
+            if (piece != nullptr && piece->getType() == "King" && piece->getColor() == kingColor) {
+                kingPosition = std::string(1, START_OF_BOARD + col) + std::to_string(row + START_OF_NUM);
+                break;
+            }
+        }
+    }
 
+    if (kingPosition.empty()) {
+        throw std::runtime_error("King not found on the board!");
+    }
+
+    // Check if any opponent's piece can move to the king's position
+    for (int row = 0; row < CHESS_SIZE; ++row) {
+        for (int col = 0; col < CHESS_SIZE; ++col) {
+            Piece* piece = _board.getBoard()[row][col];
+            if (piece != nullptr && piece->getColor() != kingColor) {
+                std::string opponentPiecePosition = std::string(1, START_OF_BOARD + col) + std::to_string(row + START_OF_NUM);
+                try
+                {
+                    if (piece->canMove(kingPosition) && _board.isPathClear(row, col, kingPosition[1] - '1', kingPosition[0] - 'a', piece->getType()))
+                    {
+                        return true; // The king is under attack
+                    }
+                }
+                catch(...)
+                {
+                    continue;
+                }
+            }
+        }
+    }
+
+    return false; // The king is not under attack
+}
 
 /*
 Creates the board.
@@ -68,8 +109,6 @@ bool Manager::isGameOver()
     return false;
 }
 
-
-
 /*
 Displays the board.
 Input: Board type _chessBoard.
@@ -78,7 +117,6 @@ Output: none
 void Manager::displayBoard()
 {
     std::cout << _board;
-
 }
 
 
@@ -115,9 +153,15 @@ void Manager::gameLoop(std::string strBoard)
             if ((_isWhiteTurn && selectedPiece->getColor() != 'w') ||(!_isWhiteTurn && selectedPiece->getColor() != 'b')) {
                 throw MoveException(MOVE_INVALID_SOURCE_EMPTY);
             }
-            _board.movePiece(from, to);
-
-            if (isCheck() == true)
+            
+            _board.movePiece(from, to,false);
+            if (isCheck(_isWhiteTurn))
+            {
+                _board.movePiece(to, from, true);
+                throw MoveException(MOVE_INVALID_CAUSES_SELF_CHECK);
+            }
+            
+            if (isCheck(!_isWhiteTurn) == true)
             {
                 throw MoveException(MOVE_VALID_CHECK);
             }

@@ -26,7 +26,7 @@ public:
     Piece* getSymbol(std::string& pos) const;
     void setBoard(const std::string& boardData);
     std::string toString() const;
-    void movePiece(const std::string& from, const std::string& to); 
+    void movePiece(const std::string& from, const std::string& to,bool god); 
     bool isPathClear(const int fromRow, const int fromCol, const int toRow, const int toCol, const std::string& pieceType) const;
     friend std::ostream& operator<<(std::ostream& os, const Board& board);
     bool isStraightPathClear(const int fromRow, const int fromCol, const int toRow, const int toCol) const;

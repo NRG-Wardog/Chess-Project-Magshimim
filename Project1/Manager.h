@@ -31,7 +31,7 @@ public:
    
     bool validateMove(Piece* piece, std::string& newPosition);
     void movePiece(Piece* piece, std::string& newPosition); 
-    bool isCheck(); 
+    bool isCheck(bool); 
     void resetGame(); 
     bool isGameOver(); 
     void displayBoard();
