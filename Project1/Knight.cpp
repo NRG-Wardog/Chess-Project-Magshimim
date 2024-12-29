@@ -20,6 +20,11 @@ bool Knight::canMove(const std::string& newPosition) const {
     return (rowDiff == 2 && colDiff == 1) || (rowDiff == 1 && colDiff == 2);
 }
 
+std::string Knight::getType() const
+{
+    return std::string("Knight");
+}
+
 Knight::Knight(char col, const std::string& pos) : Piece(col,pos)
 {}
 

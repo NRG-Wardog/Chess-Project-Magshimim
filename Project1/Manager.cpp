@@ -8,8 +8,10 @@
 #define START_OF_NUM 1
 
 
-Manager::Manager(Pipe p) : _isWhiteTurn(true), _board(),_p(p)
-{}
+Manager::Manager(Pipe p,std::string chess) : _board(chess), _p(p)
+{
+    _isWhiteTurn = chess[64] == '0';
+}
 
 Manager::~Manager() {}
 
@@ -50,9 +52,8 @@ Output: none
 void Manager::createBoard(std::string& strBoard)
 {
     if (strBoard.size() < 65) { throw std::runtime_error("size of board invalid."); }
-    std::string boardStrFixed = strBoard.substr(0, 64);
     _isWhiteTurn = strBoard[64] == WHITE_TURN;
-    _board = Board(boardStrFixed);
+    _board = Board(strBoard);
 }
 
 void Manager::resetGame()
@@ -73,25 +74,9 @@ Displays the board.
 Input: Board type _chessBoard.
 Output: none
 */
-void Manager::displayBoard(Board _chessBoard)
+void Manager::displayBoard()
 {
-  auto& chess = _chessBoard.getBoard(); 
-
-  std::cout << "  a b c d e f g h" << std::endl; 
-  for (int row = CHESS_SIZE - 1; row >= 0; --row)
-  {
-      std::cout << row + 1 << " ";
-      for (int col = 0; col < CHESS_SIZE; ++col)
-      {
-          if (chess[row][col] != nullptr) {
-              std::cout << chess[row][col] << " ";
-          }
-          else {
-              std::cout << ". ";
-          }
-      }
-      std::cout << row + 1 << std::endl;
-  }
+    std::cout << _board.toString();
 }
 
 
@@ -103,14 +88,11 @@ Output: none
 void Manager::gameLoop(std::string strBoard)
 {
     char msgToGraphics[1024];
-    //createBoard(strBoard);
-    //strcpy_s(msgToGraphics, strBoard.c_str());
-    //_p.sendMessageToGraphics(msgToGraphics);
-    //std::string msgFromGraphics = _p.getMessageFromGraphics();
-    strcpy_s(msgToGraphics, "rnbkqbnrpppppppp################################PPPPPPPPRNBKQBNR0"); // just example...
-
+    strcpy_s(msgToGraphics, _board.toString().c_str()); 
     _p.sendMessageToGraphics(msgToGraphics);
+    displayBoard();
     std::string msgFromGraphics = _p.getMessageFromGraphics();
+    
     while (isGameOver() == false && msgFromGraphics != "quit")
     {
         /*Receives 5 bytes; Message: "e2e4"*/
@@ -118,6 +100,7 @@ void Manager::gameLoop(std::string strBoard)
             std::string from = msgFromGraphics.substr(29,31);
             std::string to = msgFromGraphics.substr(32, 34);
             std::cout << from << "," << to;
+
             Piece* selectedPiece = _board.getSymbol(from);
             if (selectedPiece == nullptr) 
             {

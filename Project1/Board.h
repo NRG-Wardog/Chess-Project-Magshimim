@@ -20,17 +20,15 @@ class Board
 public:
     
     Board(const std::string& boardData);
-    Board();
     ~Board();    
-    Piece* const (&getBoard() const)[CHESS_SIZE][CHESS_SIZE];
+    const std::vector<std::vector<Piece*>>& getBoard() const;
     Piece* getSymbol(std::string& pos) const;
     void setBoard(const std::string& boardData);
     std::string toString() const;
     void movePiece(const std::string& from, const std::string& to); 
     bool isPathClear(const int fromRow, const int fromCol, const int toRow, const int toCol, const std::string& pieceType) const;
 
-
-
 private:
-    Piece* _board[CHESS_SIZE][CHESS_SIZE];
+    std::vector<std::vector<Piece*>> _board;
+    bool _whiteTurn;
 };

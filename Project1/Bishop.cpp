@@ -37,3 +37,8 @@ void Bishop::move(const std::string& newPosition)
     // Additional checks for the move could go here, e.g., if the move causes a check
     setPosition(newPosition);
 }
+
+std::string Bishop::getType() const
+{
+    return "Bishop"; 
+}

@@ -25,7 +25,7 @@ private:
 
 public:
     
-    Manager(Pipe);
+    Manager(Pipe,std::string);
     
     ~Manager();
    
@@ -34,7 +34,7 @@ public:
     bool isCheck(); 
     void resetGame(); 
     bool isGameOver(); 
-    void displayBoard(Board _chessBoard);
+    void displayBoard();
     void gameLoop(std::string strBoard);
 };
 

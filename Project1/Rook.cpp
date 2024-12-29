@@ -1,9 +1,6 @@
 #include "Rook.h"
 #include "MoveException.h"
 
-
-
-
 Rook::Rook(char col, const std::string& pos)
     : Piece(col, pos)
 {
@@ -11,8 +8,6 @@ Rook::Rook(char col, const std::string& pos)
         throw MoveException(MOVE_INVALID_OUT_OF_BOUNDS); // Invalid position indices
     }
 }
-
-
 
 /*
 * Moves the piece across the board.
@@ -50,4 +45,9 @@ bool Rook::canMove(const std::string& newPosition) const {
     }
 
     return false;
+}
+
+std::string Rook::getType() const
+{
+    return std::string("Rook");
 }

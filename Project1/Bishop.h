@@ -11,7 +11,7 @@ public:
     Bishop(char color, const std::string& position);
     bool canMove(const std::string& newPosition) const override;
     void move(const std::string& newPosition) override;
-    std::string getType() const override { return "Bishop"; }
+    std::string getType() const override;
 };
 
 #endif // BISHOP_H

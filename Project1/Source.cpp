@@ -18,7 +18,7 @@ int main() {
     srand(time_t(NULL));
     Pipe p;
     bool isConnect = p.connect();
-    Manager man(p);
+    
     string ans;
     while (!isConnect) {
         cout << "Can't connect to graphics" << endl;
@@ -43,13 +43,9 @@ int main() {
         std::string strBoard = "rnbkqbnrpppppppp################################PPPPPPPPRNBKQBNR1";
         std::cout << "Size of chessboard: " << strBoard.size() << std::endl;
         // Initialize the board
-
-        
+        Manager man(p,strBoard);
         man.gameLoop(strBoard);
          // Convert board to string
-    }
-    catch (const MoveException& e) {
-        std::cerr << "Error " << e.getErrorCode() << ": " << e.what() << std::endl;
     }
     catch (std::exception& e) {
         std::cerr << "An error occurred: " << e.what() << std::endl;

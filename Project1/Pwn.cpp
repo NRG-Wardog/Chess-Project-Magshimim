@@ -35,4 +35,9 @@ bool Pwn::canMove(const std::string& newPosition) const
     return (newCol == currCol && (newRow == currRow + direction || (_firstMove && newRow == currRow + 2 * direction)));
 }
 
+std::string Pwn::getType() const
+{
+    return std::string("Pwn");
+}
+
 std::string pieceLogo = "p";

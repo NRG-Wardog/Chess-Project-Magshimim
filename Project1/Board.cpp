@@ -15,27 +15,11 @@
 #define WHITE 'w'
 #define BLACK 'b'
 
-Board::Board(const std::string& boardData)
+Board::Board(const std::string& boardData) : _board(CHESS_SIZE, std::vector<Piece*>(CHESS_SIZE, nullptr))
 {
-    setBoard(boardData);
+    _whiteTurn = boardData[64] == '0';
+    setBoard(boardData); // Delegate to setBoard for parsing and initialization
 }
-
-/*std::string getLogo()
-{
-    return 
-}*\*/
-
-
-
-Board::Board()
-{
-    for (int row = 0; row < CHESS_SIZE; ++row) {
-        for (int col = 0; col < CHESS_SIZE; ++col) {
-            _board[row][col] = nullptr;
-        }
-    }
-}
-
 
 Board::~Board() {
     for (int row = 0; row < CHESS_SIZE; ++row) {
@@ -46,15 +30,8 @@ Board::~Board() {
 }
 
 
-Piece* const (&Board::getBoard() const)[CHESS_SIZE][CHESS_SIZE]{
+const std::vector<std::vector<Piece*>>& Board::getBoard() const {
     return _board;
-}
-
-
-Piece* displayPiece(Piece* piece)
-{
-    std::cout << piece->getLogo() << std::endl; 
-    return piece; 
 }
 
 /*
@@ -62,15 +39,15 @@ Piece* displayPiece(Piece* piece)
 * Input: string reference pos.
 * Output: position 
 */
-Piece* Board::getSymbol(std::string& pos) const
-{
+Piece* Board::getSymbol(std::string& pos) const {
     if (pos.size() != 2 || pos[0] < 'a' || pos[0] > 'h' || pos[1] < '1' || pos[1] > '8') {
         throw std::runtime_error("Invalid chessboard position format.");
     }
-    auto col = pos[0] - START_OF_BOARD;
-    auto row = pos[1] - '1';
-    return _board[col][row];
+    auto col = pos[0] - 'a'; // Column is derived from the file (letter)
+    auto row = '8' - pos[1]; // Row is derived from the rank (number)
+    return _board[row][col];
 }
+
 
 /*
 * Sets the game board.
@@ -79,7 +56,7 @@ Piece* Board::getSymbol(std::string& pos) const
 */
 void Board::setBoard(const std::string& boardData)
 {
-    if (boardData.size() != CHESS_SIZE * CHESS_SIZE)
+    if (boardData.size() != CHESS_SIZE * CHESS_SIZE +1)
     {
         throw std::runtime_error("Invalid board data size. Expected 64 characters.");
     }
@@ -87,6 +64,8 @@ void Board::setBoard(const std::string& boardData)
     {
         for (auto col = 0; col < CHESS_SIZE; ++col)
         {
+            delete _board[row][col];
+            _board[row][col] = nullptr;
             std::string pos = std::string(1, START_OF_BOARD + col) + std::to_string(row + START_OF_NUM);
             char pieceChar = boardData[row * CHESS_SIZE + col];
             char color = WHITE;
@@ -132,27 +111,37 @@ void Board::setBoard(const std::string& boardData)
 */
 std::string Board::toString() const {
     std::string boardString;
+    boardString.reserve(CHESS_SIZE * (CHESS_SIZE + 1)); // Reserve space for all rows + newlines
 
-    for (int row = 0; row < CHESS_SIZE; ++row) {
-        for (int col = 0; col < CHESS_SIZE; ++col) {
+    for (size_t row = 0; row < _board.size(); ++row) {
+        for (size_t col = 0; col < _board[row].size(); ++col) {
             if (_board[row][col] == nullptr) {
-                boardString += '#'; 
+                boardString += '#';  // Empty square
             }
             else {
                 std::string type = _board[row][col]->getType();
-                char pieceType = type[0]; //bug idk why
-                if (_board[row][col]->getColor() == 'w') {
-                    boardString += pieceType; 
+                char pieceType = type[0];
+                if (_board[row][col]->getColor() == WHITE) {
+                    boardString += pieceType;  // Uppercase for white
                 }
                 else {
-                    boardString += std::tolower(pieceType); // Black pieces are lowercase
+                    boardString += std::tolower(pieceType); // Lowercase for black
                 }
             }
         }
     }
-
+    if (_whiteTurn)
+    {
+        boardString += "0";
+    }
+    else
+    {
+        boardString += "1";
+    }
     return boardString;
 }
+
+
 
 
 /*

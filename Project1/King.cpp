@@ -27,7 +27,7 @@ void King::move(const std::string& newPosition)
 */
 bool King::isAttacked(const Board& currentBoard)
 {
-    Piece* const (&boardState)[CHESS_SIZE][CHESS_SIZE] = currentBoard.getBoard();
+    const std::vector<std::vector<Piece*>>& boardState = currentBoard.getBoard();
 
     for (int row = 0; row < CHESS_SIZE; ++row) {
         for (int col = 0; col < CHESS_SIZE; ++col) {
@@ -78,4 +78,9 @@ bool King::canMove(const std::string& newPosition) const
     }
 
     return false; // Invalid move
+}
+
+std::string King::getType() const
+{
+    return std::string("King");
 }

@@ -24,6 +24,11 @@ bool Queen::canMove(const std::string& newPosition) const {
     return straightMove || diagonalMove;
 }
 
+std::string Queen::getType() const
+{
+    return std::string("Queen");
+}
+
 /*
 * Moves the piece across the board.
 * Input: string reference new position.
