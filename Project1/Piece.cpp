@@ -18,6 +18,11 @@ char Piece::getColor() const
 	return _color;
 }
 
+/*
+* Sets the position of the piece.
+* Input: string reference pos.
+* Output: none
+*/
 void Piece::setPosition(const std::string& pos)
 {
 	if (pos[ROW]< START_OF_BOARD || pos[ROW] > CHESS_END_OF_BOARD || pos[COL]> END_OF_NUM_BOARD || pos[COL] < START_OF_NUM_BOARD)

@@ -15,11 +15,21 @@ Manager::~Manager() {}
 
 
 
+/*
+Validates the move.
+Input: Piece pointer piece, string reference newPosition.
+Output: true or false
+*/
 bool Manager::validateMove(Piece* piece, std::string& newPosition)
 {
     return piece->canMove(newPosition);
 }
 
+/*
+Moves the piece itself.
+Input: Piece pointer piece, string reference newPosition.
+Output: none
+*/
 void Manager::movePiece(Piece* piece, std::string& newPosition)
 {
     piece->move(newPosition);
@@ -31,6 +41,12 @@ bool Manager::isCheck()
     return false;
 }
 
+
+/*
+Creates the board.
+Input: string reference strBoard.
+Output: none
+*/
 void Manager::createBoard(std::string& strBoard)
 {
     if (strBoard.size() < 65) { throw std::runtime_error("size of board invalid."); }
@@ -50,6 +66,13 @@ bool Manager::isGameOver()
     return false;
 }
 
+
+
+/*
+Displays the board.
+Input: Board type _chessBoard.
+Output: none
+*/
 void Manager::displayBoard(Board _chessBoard)
 {
   auto& chess = _chessBoard.getBoard(); 
@@ -71,6 +94,12 @@ void Manager::displayBoard(Board _chessBoard)
   }
 }
 
+
+/*
+Main loop of the game.
+Input: string strBoard.
+Output: none
+*/
 void Manager::gameLoop(std::string strBoard)
 {
     char msgToGraphics[1024];

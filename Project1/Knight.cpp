@@ -2,7 +2,11 @@
 #include <stdexcept>
 #include <cmath> 
 
-
+/*
+* Checks if moving is possible.
+* Input: string reference new position.
+* Output: true or false
+*/
 bool Knight::canMove(const std::string& newPosition) const {
     int currentRow = _position[1] - '1'; 
     int currentCol = _position[0] - 'a'; 
@@ -19,6 +23,11 @@ bool Knight::canMove(const std::string& newPosition) const {
 Knight::Knight(char col, const std::string& pos) : Piece(col,pos)
 {}
 
+/*
+* Moves the piece across the board.
+* Input: string reference new position.
+* Output: none
+*/
 void Knight::move(const std::string& newPosition) {
     if (!canMove(newPosition)) {
         throw std::invalid_argument("Invalid move for Knight.");

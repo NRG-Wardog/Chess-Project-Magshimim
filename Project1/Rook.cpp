@@ -3,6 +3,7 @@
 
 
 
+
 Rook::Rook(char col, const std::string& pos)
     : Piece(col, pos)
 {
@@ -11,6 +12,13 @@ Rook::Rook(char col, const std::string& pos)
     }
 }
 
+
+
+/*
+* Moves the piece across the board.
+* Input: string reference new position.
+* Output: none
+*/
 void Rook::move(const std::string& newPosition) {
     if (!canMove(newPosition)) {
         throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE); // Illegal move for Rook
@@ -19,6 +27,11 @@ void Rook::move(const std::string& newPosition) {
     _position = newPosition;
 }
 
+/*
+* Checks if moving is possible.
+* Input: string reference new position.
+* Output: true or false
+*/
 bool Rook::canMove(const std::string& newPosition) const {
     // Validate position format
     if (newPosition.size() != 2 || newPosition[ROW] < START_OF_BOARD || newPosition[ROW] > CHESS_END_OF_BOARD || newPosition[COL] < START_OF_NUM_AS_CHAR || newPosition[COL] > CHESS_SIZE_AS_CHAR)

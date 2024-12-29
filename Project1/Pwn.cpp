@@ -3,6 +3,12 @@
 Pwn::Pwn(char col, const std::string& pos) : Piece(col,pos), _firstMove(true)
 {}
 
+
+/*
+* Moves the piece across the board.
+* Input: string reference new position.
+* Output: none
+*/
 void Pwn::move(const std::string & newPosition)
 {
     if (canMove(newPosition)) {
@@ -13,6 +19,11 @@ void Pwn::move(const std::string & newPosition)
     }
 }
 
+/*
+* Checks if moving is possible.
+* Input: string reference new position.
+* Output: true or false
+*/
 bool Pwn::canMove(const std::string& newPosition) const
 {
     int direction = (_color == 'w') ? 1 : -1;

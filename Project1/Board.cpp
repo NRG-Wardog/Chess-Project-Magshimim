@@ -42,7 +42,11 @@ Piece* const (&Board::getBoard() const)[CHESS_SIZE][CHESS_SIZE]{
     return _board;
 }
 
-
+/*
+* Gets the piece symbol form position.
+* Input: string reference pos.
+* Output: position 
+*/
 Piece* Board::getSymbol(std::string& pos) const
 {
     if (pos.size() != 2 || pos[0] < 'a' || pos[0] > 'h' || pos[1] < '1' || pos[1] > '8') {
@@ -53,6 +57,11 @@ Piece* Board::getSymbol(std::string& pos) const
     return _board[col][row];
 }
 
+/*
+* Sets the game board.
+* Input: string reference to boardData.
+* Output: none
+*/
 void Board::setBoard(const std::string& boardData)
 {
     if (boardData.size() != CHESS_SIZE * CHESS_SIZE)
@@ -100,6 +109,12 @@ void Board::setBoard(const std::string& boardData)
     }
 }
 
+
+/*
+* To string function.
+* Input: none.
+* Output: boardString
+*/
 std::string Board::toString() const {
     std::string boardString;
 
@@ -124,6 +139,12 @@ std::string Board::toString() const {
     return boardString;
 }
 
+
+/*
+* Moves the piece across the board.
+* Input: string reference from , string reference to.
+* Output: none
+*/
 void Board::movePiece(const std::string& from, const std::string& to) {
     // Convert "from" and "to" to row and column indices
     int fromRow = from[1] - '1';
@@ -175,6 +196,11 @@ void Board::movePiece(const std::string& from, const std::string& to) {
 }
 
 
+/*
+* Checks if the path is clear by checking for direction, obstacles according to different pieces.
+* Input: int fromRow, int fromCol, int toRow, int toCol, string reference pieceType.
+* Output: true or false
+*/
 bool Board::isPathClear(const int fromRow,const int fromCol,const int toRow,const int toCol, const std::string& pieceType) const {
     int rowDiff = toRow - fromRow;
     int colDiff = toCol - fromCol;

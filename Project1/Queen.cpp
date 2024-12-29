@@ -6,7 +6,11 @@
 Queen::Queen(char col, const std::string& pos) : Piece(col,pos)
 {}
 
-
+/*
+* Checks if moving is possible.
+* Input: string reference new position.
+* Output: true or false
+*/
 bool Queen::canMove(const std::string& newPosition) const {
     int currentRow = _position[1] - '1'; // Convert '1'-'8' to 0-7
     int currentCol = _position[0] - 'a'; // Convert 'a'-'h' to 0-7
@@ -20,6 +24,11 @@ bool Queen::canMove(const std::string& newPosition) const {
     return straightMove || diagonalMove;
 }
 
+/*
+* Moves the piece across the board.
+* Input: string reference new position.
+* Output: none
+*/
 void Queen::move(const std::string& newPosition) {
     if (!canMove(newPosition)) {
         throw std::invalid_argument("Invalid move for Queen.");

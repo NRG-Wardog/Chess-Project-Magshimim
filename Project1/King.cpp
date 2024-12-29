@@ -5,6 +5,13 @@
 
 King::King(char col, const std::string& pos) : Piece(col, pos) {}
 
+
+
+/*
+* Moves the piece across the board.
+* Input: string reference new position.
+* Output: none
+*/
 void King::move(const std::string& newPosition)
 {
     if (!canMove(newPosition)) {
@@ -13,6 +20,11 @@ void King::move(const std::string& newPosition)
     setPosition(newPosition);
 }
 
+/*
+* Checks if attacked.
+* Input: board reference currentBoard.
+* Output: true or false
+*/
 bool King::isAttacked(const Board& currentBoard)
 {
     Piece* const (&boardState)[CHESS_SIZE][CHESS_SIZE] = currentBoard.getBoard();
@@ -41,7 +53,11 @@ bool King::isAttacked(const Board& currentBoard)
     return false;
 }
 
-
+/*
+* Checks if moving is possible.
+* Input: string reference new position.
+* Output: true or false
+*/
 bool King::canMove(const std::string& newPosition) const
 {
     // Validate newPosition format
