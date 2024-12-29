@@ -62,10 +62,12 @@ void Board::setBoard(const std::string& boardData)
     }
     std::string temp = boardData; // Create a temporary copy
     std::reverse(temp.begin(), temp.end()-1); // Reverse the temporary copy
-    
-    for (auto row = 0; row < CHESS_SIZE; ++row)
-    {
-        for (auto col = 0; col < CHESS_SIZE; ++col)
+    size_t index = temp.find(KING);
+
+    std::swap(temp[temp.find(KING)], temp[temp.find(QUEEN)]);
+    std::swap(temp[temp.find(std::toupper(KING))], temp[temp.find(std::toupper(QUEEN))]);
+    for (auto row = CHESS_SIZE - 1; row >= 0; --row) {
+        for (auto col = CHESS_SIZE - 1; col >= 0; --col)
         {
             delete _board[row][col];
             _board[row][col] = nullptr;
@@ -116,8 +118,8 @@ std::string Board::toString() const {
     std::string boardString;
     boardString.reserve(CHESS_SIZE * (CHESS_SIZE + 1)); // Reserve space for all rows + newlines
 
-    for (int row = CHESS_SIZE - 1; row >= 0 ; --row) {
-        for (int col = CHESS_SIZE - 1; col>= 0; --col) {
+    for (auto row = CHESS_SIZE-1; row >=0 ; --row) {
+        for (auto col = 0; col < CHESS_SIZE ; ++col) {
             if (_board[row][col] == nullptr) {
                 boardString += '#';  // Empty square
             }
@@ -164,8 +166,8 @@ void Board::movePiece(const std::string& from, const std::string& to) {
     int toCol = to[0] - 'a';
     Piece* targetPiece = _board[toRow - 1][toCol];
     // Validate bounds
-    if (fromRow < 0 || fromRow >= CHESS_SIZE || fromCol < 0 || fromCol >= CHESS_SIZE ||
-        toRow < 0 || toRow >= CHESS_SIZE || toCol < 0 || toCol >= CHESS_SIZE) {
+    if (fromRow <= 0 || fromRow > CHESS_SIZE || fromCol <= 0 || fromCol > CHESS_SIZE ||
+        toRow <= 0 || toRow > CHESS_SIZE || toCol <= 0 || toCol > CHESS_SIZE) {
         throw MoveException(MOVE_INVALID_OUT_OF_BOUNDS);
     }
 
@@ -224,14 +226,13 @@ void Board::movePiece(const std::string& from, const std::string& to) {
 * Input: int fromRow, int fromCol, int toRow, int toCol, string reference pieceType.
 * Output: true or false
 */
-bool Board::isPathClear(const int fromRow,const int fromCol,const int toRow,const int toCol, const std::string& pieceType) const {
+bool Board::isPathClear(const int fromRow, const int fromCol, const int toRow, const int toCol, const std::string& pieceType) const {
     int rowDiff = toRow - fromRow;
     int colDiff = toCol - fromCol;
 
     if (pieceType == "Rook") {
         // Rook moves must be straight: either rowDiff or colDiff is 0
-        if (rowDiff != 0 && colDiff != 0)
-        {
+        if ((rowDiff != 0 && colDiff != 0) || (rowDiff == 0 && colDiff == 0)) {
             return false;
         }
 
@@ -307,12 +308,12 @@ bool Board::isPathClear(const int fromRow,const int fromCol,const int toRow,cons
         }
         return false; // Invalid move for Queen
     }
-    else if (pieceType == "Knight"|| pieceType == "Pawn")
-    {
-        return true;
+    else if (pieceType == "Knight" || pieceType == "Pawn") {
+        return true; // Knights and Pawns don't require path validation
     }
     return false; // Invalid piece type or unsupported path validation
 }
+
 
 
 
@@ -320,8 +321,8 @@ std::ostream& operator<<(std::ostream& os, const Board& board)
 {
     std::string boardString = "";
     std::vector<std::vector<Piece*>> _board = board.getBoard();
-    for (auto row = CHESS_SIZE-1; row >= 0; --row) {
-        for (auto col = 0; col < CHESS_SIZE ; ++col) {
+    for (auto row = CHESS_SIZE - 1; row >= 0; --row) {
+        for (auto col = 0; col < CHESS_SIZE; ++col) {
             if (_board[row][col] == nullptr) {
                 boardString += '#';  // Empty square
             }

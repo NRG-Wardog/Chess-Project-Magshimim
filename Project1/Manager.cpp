@@ -112,7 +112,6 @@ void Manager::gameLoop(std::string strBoard)
                 throw MoveException(MOVE_INVALID_SOURCE_EMPTY);
             }
             std::cout << *selectedPiece << "\n";
-
             if ((_isWhiteTurn && selectedPiece->getColor() != 'w') ||(!_isWhiteTurn && selectedPiece->getColor() != 'b')) {
                 throw MoveException(MOVE_INVALID_SOURCE_EMPTY);
             }
@@ -134,6 +133,7 @@ void Manager::gameLoop(std::string strBoard)
             {
                 bool validateMove(Piece * piece, int x, int y);
                 strcpy_s(msgToGraphics, sizeof(msgToGraphics), "0");
+                _isWhiteTurn = !_isWhiteTurn;
             }
             strcpy_s(msgToGraphics, e.what());
             msgToGraphics[1] = 0;
@@ -141,7 +141,7 @@ void Manager::gameLoop(std::string strBoard)
             _p.sendMessageToGraphics(msgToGraphics);
         }
         std::cout << "\n";
-        _isWhiteTurn = !_isWhiteTurn;
+        
         displayBoard();
         msgFromGraphics = _p.getMessageFromGraphics();
     }
