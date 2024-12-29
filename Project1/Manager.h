@@ -21,7 +21,7 @@ private:
     Pipe _p;
     Board _board;
 
-    void createBoard(std::string&);
+    Board createBoard(std::string&);
 
 public:
     

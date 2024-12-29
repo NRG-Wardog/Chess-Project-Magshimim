@@ -41,10 +41,10 @@ const std::vector<std::vector<Piece*>>& Board::getBoard() const {
 */
 Piece* Board::getSymbol(std::string& pos) const {
     if (pos.size() != 2 || pos[0] < 'a' || pos[0] > 'h' || pos[1] < '1' || pos[1] > '8') {
-        throw std::runtime_error("Invalid chessboard position format.");
+        throw MoveException(MOVE_INVALID_OUT_OF_BOUNDS);
     }
     auto col = pos[0] - 'a'; // Column is derived from the file (letter)
-    auto row = '8' - pos[1]; // Row is derived from the rank (number)
+    auto row = pos[1]-'1'; // Row is derived from the rank (number)
     return _board[row][col];
 }
 
@@ -60,6 +60,8 @@ void Board::setBoard(const std::string& boardData)
     {
         throw std::runtime_error("Invalid board data size. Expected 64 characters.");
     }
+    std::string temp = boardData; // Create a temporary copy
+    std::reverse(temp.begin(), temp.end()-1); // Reverse the temporary copy
     for (auto row = 0; row < CHESS_SIZE; ++row)
     {
         for (auto col = 0; col < CHESS_SIZE; ++col)
@@ -67,11 +69,11 @@ void Board::setBoard(const std::string& boardData)
             delete _board[row][col];
             _board[row][col] = nullptr;
             std::string pos = std::string(1, START_OF_BOARD + col) + std::to_string(row + START_OF_NUM);
-            char pieceChar = boardData[row * CHESS_SIZE + col];
-            char color = WHITE;
+            char pieceChar = temp[row * CHESS_SIZE + col];
+            char color = BLACK;
             if (std::isupper(pieceChar))
             {
-                color = BLACK;
+                color = WHITE;
             }
 	        switch (std::tolower(pieceChar))
 	        {
@@ -113,8 +115,8 @@ std::string Board::toString() const {
     std::string boardString;
     boardString.reserve(CHESS_SIZE * (CHESS_SIZE + 1)); // Reserve space for all rows + newlines
 
-    for (size_t row = 0; row < _board.size(); ++row) {
-        for (size_t col = 0; col < _board[row].size(); ++col) {
+    for (int row = CHESS_SIZE - 1; row >= 0 ; --row) {
+        for (int col = CHESS_SIZE - 1; col >= 0; --col) {
             if (_board[row][col] == nullptr) {
                 boardString += '#';  // Empty square
             }
@@ -153,34 +155,34 @@ void Board::movePiece(const std::string& from, const std::string& to) {
     // Convert "from" and "to" to row and column indices
     int fromRow = from[1] - '1';
     int fromCol = from[0] - 'a';
-    int toRow = to[1] - '1';
+    int toRow = to[1]-'0';
     int toCol = to[0] - 'a';
 
     // Validate bounds
     if (fromRow < 0 || fromRow >= CHESS_SIZE || fromCol < 0 || fromCol >= CHESS_SIZE ||
         toRow < 0 || toRow >= CHESS_SIZE || toCol < 0 || toCol >= CHESS_SIZE) {
-        throw std::out_of_range("Move out of bounds.");
+        throw MoveException(MOVE_INVALID_OUT_OF_BOUNDS);
     }
 
     // Get the piece at the "from" position
     Piece* piece = _board[fromRow][fromCol];
     if (piece == nullptr) {
-        throw std::invalid_argument("No piece at the source position.");
+        throw MoveException(MOVE_INVALID_SOURCE_EMPTY);
     }
 
     // Get the type and color of the piece
     std::string pieceType = piece->getType();
     std::string toPosition = std::string(1, 'a' + toCol) + std::to_string(toRow + 1);
-
+    std::cout << toPosition;
     // Check if the move is valid for the piece
     if (!piece->canMove(toPosition)) {
-        throw std::invalid_argument("Invalid move for the selected piece.");
+        throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);
     }
 
     // Path validation for applicable pieces
     if (pieceType == "Rook" || pieceType == "Bishop" || pieceType == "Queen") {
         if (!isPathClear(fromRow, fromCol, toRow, toCol, pieceType)) {
-            throw std::invalid_argument("Path is blocked.");
+            throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);//what that error? like what
         }
     }
 
@@ -188,7 +190,7 @@ void Board::movePiece(const std::string& from, const std::string& to) {
     Piece* targetPiece = _board[toRow][toCol];
     if (targetPiece != nullptr) {
         if (targetPiece->getColor() == piece->getColor()) {
-            throw std::invalid_argument("Cannot capture your own piece.");
+            throw MoveException(MOVE_INVALID_TARGET_OCCUPIED);
         }
         delete targetPiece; // Remove the captured piece
     }
@@ -295,3 +297,30 @@ bool Board::isPathClear(const int fromRow,const int fromCol,const int toRow,cons
     return false; // Invalid piece type or unsupported path validation
 }
 
+
+
+std::ostream& operator<<(std::ostream& os, const Board& board)
+{
+    std::string boardString = "";
+    std::vector<std::vector<Piece*>> _board = board.getBoard();
+    for (auto row = 0; row < CHESS_SIZE; ++row) {
+        for (auto col = 0; col < CHESS_SIZE; ++col) {
+            if (_board[row][col] == nullptr) {
+                boardString += '#';  // Empty square
+            }
+            else {
+                std::string type = _board[row][col]->getType();
+                char pieceType = type[0];
+                if (_board[row][col]->getColor() == WHITE) {
+                    boardString += pieceType;  // Uppercase for white
+                }
+                else {
+                    boardString += std::tolower(pieceType); // Lowercase for black
+                }
+            }
+        }
+        boardString += "\n";
+    }
+    os << boardString;
+    return os;
+}

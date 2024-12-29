@@ -40,7 +40,7 @@ int main() {
 
     try {
         char msgToGraphics[1024];
-        std::string strBoard = "rnbkqbnrpppppppp################################PPPPPPPPRNBKQBNR1";
+        std::string strBoard = "rnbkqbnrpppppppp################################PPPPPPPPRNBKQBNR0";
         std::cout << "Size of chessboard: " << strBoard.size() << std::endl;
         // Initialize the board
         Manager man(p,strBoard);

@@ -8,7 +8,7 @@
 #define START_OF_NUM 1
 
 
-Manager::Manager(Pipe p,std::string chess) : _board(chess), _p(p)
+Manager::Manager(Pipe p,std::string chess) : _p(p),_board(chess)
 {
     _isWhiteTurn = chess[64] == '0';
 }
@@ -49,11 +49,12 @@ Creates the board.
 Input: string reference strBoard.
 Output: none
 */
-void Manager::createBoard(std::string& strBoard)
+Board Manager::createBoard(std::string& strBoard)
 {
     if (strBoard.size() < 65) { throw std::runtime_error("size of board invalid."); }
     _isWhiteTurn = strBoard[64] == WHITE_TURN;
     _board = Board(strBoard);
+    return _board;
 }
 
 void Manager::resetGame()
@@ -76,7 +77,8 @@ Output: none
 */
 void Manager::displayBoard()
 {
-    std::cout << _board.toString();
+    std::cout << _board;
+
 }
 
 
@@ -95,23 +97,26 @@ void Manager::gameLoop(std::string strBoard)
     
     while (isGameOver() == false && msgFromGraphics != "quit")
     {
-        /*Receives 5 bytes; Message: "e2e4"*/
+        displayBoard();
         try {
-            std::string from = msgFromGraphics.substr(29,31);
-            std::string to = msgFromGraphics.substr(32, 34);
-            std::cout << from << "," << to;
-
+            std::string from = msgFromGraphics.substr(0,2);
+            std::string to = msgFromGraphics.substr(2, 4);
+            std::cout << from << "," << to << "\n";
+            
+            if (from == to)
+            {
+                throw MoveException(MOVE_INVALID_IDENTICAL_SQUARES);
+            }
             Piece* selectedPiece = _board.getSymbol(from);
             if (selectedPiece == nullptr) 
             {
                 throw MoveException(MOVE_INVALID_SOURCE_EMPTY);
             }
+            std::cout << *selectedPiece << "\n";
 
-            if ((_isWhiteTurn && selectedPiece->getColor() != 'w') ||
-                (!_isWhiteTurn && selectedPiece->getColor() != 'b')) {
-                throw MoveException(MOVE_INVALID_TURN);
+            if ((_isWhiteTurn && selectedPiece->getColor() != 'w') ||(!_isWhiteTurn && selectedPiece->getColor() != 'b')) {
+                throw MoveException(MOVE_INVALID_SOURCE_EMPTY);
             }
-
             if (!validateMove(selectedPiece, to)) {
                 throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);
             }
@@ -122,21 +127,27 @@ void Manager::gameLoop(std::string strBoard)
             {
                 throw MoveException(MOVE_VALID_CHECK);
             }
+            else
+            {
+                throw MoveException(MOVE_VALID);
+            }
         }
         catch (const std::exception& e) 
         {
+            std::memset(msgToGraphics, '\0', sizeof(msgToGraphics));
             if (e.what() == MOVE_VALID_STR || e.what() == MOVE_VALID_CHECK_STR)
             {
                 bool validateMove(Piece * piece, int x, int y);
                 strcpy_s(msgToGraphics, sizeof(msgToGraphics), "0");
             }
-            msgToGraphics[0] = (char)(e.what());
+            strcpy_s(msgToGraphics, e.what());
             msgToGraphics[1] = 0;
-            std::cerr << e.what() << std::endl;
-            
+            std::cerr << "code:" << e.what() << std::endl;
+            _p.sendMessageToGraphics(msgToGraphics);
         }
-        std::string msgFromGraphics = _p.getMessageFromGraphics();
-        std::cout << msgFromGraphics;
+        std::cout << "\n";
+        _isWhiteTurn = !_isWhiteTurn;
+        msgFromGraphics = _p.getMessageFromGraphics();
     }
 }
 

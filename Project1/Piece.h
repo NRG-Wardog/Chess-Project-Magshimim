@@ -37,7 +37,6 @@ public:
     virtual bool canMove(const std::string &newPosition) const = 0;
     virtual std::string getType() const = 0;
     friend std::ostream& operator<<(std::ostream& os, const Piece& piece);
-
 };
 
 
