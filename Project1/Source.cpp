@@ -48,7 +48,7 @@ int main() {
          // Convert board to string
     }
     catch (std::exception& e) {
-        std::cerr << "An error occurred: " << e.what() << std::endl;
+        std::cerr << e.what() << std::endl;
     }
     p.close();
 

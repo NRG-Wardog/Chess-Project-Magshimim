@@ -18,7 +18,7 @@
 Board::Board(const std::string& boardData) : _board(CHESS_SIZE, std::vector<Piece*>(CHESS_SIZE, nullptr))
 {
     _whiteTurn = boardData[64] == '0';
-    setBoard(boardData); // Delegate to setBoard for parsing and initialization
+    setBoard(boardData); 
 }
 
 Board::~Board() {
@@ -62,6 +62,7 @@ void Board::setBoard(const std::string& boardData)
     }
     std::string temp = boardData; // Create a temporary copy
     std::reverse(temp.begin(), temp.end()-1); // Reverse the temporary copy
+    
     for (auto row = 0; row < CHESS_SIZE; ++row)
     {
         for (auto col = 0; col < CHESS_SIZE; ++col)
@@ -121,10 +122,14 @@ std::string Board::toString() const {
                 boardString += '#';  // Empty square
             }
             else {
+                int  place = 0;
                 std::string type = _board[row][col]->getType();
-                char pieceType = type[0];
+                if (type == "Knight") {
+                    place = 1;
+                }
+                char pieceType = type[place];
                 if (_board[row][col]->getColor() == WHITE) {
-                    boardString += pieceType;  // Uppercase for white
+                    boardString += std::toupper(pieceType);  // Uppercase for white
                 }
                 else {
                     boardString += std::tolower(pieceType); // Lowercase for black
@@ -172,7 +177,7 @@ void Board::movePiece(const std::string& from, const std::string& to) {
 
     // Get the type and color of the piece
     std::string pieceType = piece->getType();
-    std::string toPosition = std::string(1, 'a' + toCol) + std::to_string(toRow + 1);
+    std::string toPosition = std::string(1, 'a' + toCol) + std::to_string(toRow);
     std::cout << toPosition;
     // Check if the move is valid for the piece
     if (!piece->canMove(toPosition)) {
@@ -187,7 +192,7 @@ void Board::movePiece(const std::string& from, const std::string& to) {
     }
 
     // Handle capturing
-    Piece* targetPiece = _board[toRow][toCol];
+    Piece* targetPiece = _board[toRow-1][toCol];
     if (targetPiece != nullptr) {
         if (targetPiece->getColor() == piece->getColor()) {
             throw MoveException(MOVE_INVALID_TARGET_OCCUPIED);
