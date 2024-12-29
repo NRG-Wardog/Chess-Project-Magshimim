@@ -7,6 +7,7 @@
 
 class Pwn : public Piece {
 public:
+    std::string pieceLogo;
     Pwn(char col, const std::string& pos);
 
     void move(const std::string& newPosition) override;

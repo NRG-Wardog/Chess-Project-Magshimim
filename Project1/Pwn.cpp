@@ -4,6 +4,7 @@ Pwn::Pwn(char col, const std::string& pos) : Piece(col,pos), _firstMove(true)
 {}
 
 
+
 /*
 * Moves the piece across the board.
 * Input: string reference new position.
@@ -33,3 +34,5 @@ bool Pwn::canMove(const std::string& newPosition) const
     int currRow = _position[1] - '0';
     return (newCol == currCol && (newRow == currRow + direction || (_firstMove && newRow == currRow + 2 * direction)));
 }
+
+std::string pieceLogo = "p";

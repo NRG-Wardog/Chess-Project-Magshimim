@@ -18,6 +18,7 @@ char Piece::getColor() const
 	return _color;
 }
 
+
 /*
 * Sets the position of the piece.
 * Input: string reference pos.

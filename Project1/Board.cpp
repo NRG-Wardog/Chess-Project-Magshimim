@@ -8,6 +8,7 @@
 #include "Pwn.h"
 #include "Queen.h"
 #include "Rook.h"
+#include "Piece.h"
 
 #define START_OF_BOARD 'a'
 #define START_OF_NUM 1
@@ -18,6 +19,13 @@ Board::Board(const std::string& boardData)
 {
     setBoard(boardData);
 }
+
+/*std::string getLogo()
+{
+    return 
+}*\*/
+
+
 
 Board::Board()
 {
@@ -40,6 +48,13 @@ Board::~Board() {
 
 Piece* const (&Board::getBoard() const)[CHESS_SIZE][CHESS_SIZE]{
     return _board;
+}
+
+
+Piece* displayPiece(Piece* piece)
+{
+    std::cout << piece->getLogo() << std::endl; 
+    return piece; 
 }
 
 /*
