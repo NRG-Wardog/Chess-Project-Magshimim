@@ -2,17 +2,32 @@
 #include <iostream>
 #include <stdexcept>
 
+#define WHITE_STR "White"
+#define BLACK_STR "Black"
+
+
+//c'tor
 Piece::Piece(const char col, const std::string& pos)
 {
 	_color = col;
 	setPosition(pos);
 }
 
+/*
+* func return position 
+* input:none
+* output:string pos
+*/
 std::string Piece::getPosition() const
 {
 	return _position;
 }
 
+/*
+* func return color
+* input:none
+* output:char col
+*/
 char Piece::getColor() const
 {
 	return _color;
@@ -33,9 +48,14 @@ void Piece::setPosition(const std::string& pos)
 	_position = pos;
 }
 
+/*
+* func print to screen
+* input:os,piece refrance const
+* output:os to print
+*/
 std::ostream& operator<<(std::ostream& os, const Piece& piece) {
     os << "Piece: " << piece.getType() 
-       << ", Color: " << (piece._color == 'w' ? "White" : "Black") 
+       << ", Color: " << (piece._color == WHITE ? WHITE_STR : BLACK_STR)
        << ", Position: " << piece._position;
     return os;
 }

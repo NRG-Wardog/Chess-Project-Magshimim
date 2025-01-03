@@ -15,6 +15,14 @@
 #include <chrono>
 #include <stdexcept>
 
+
+#define BOARD_LETTERS "rnbkqbnrpppppppp################################PPPPPPPPRNBKQBNR0"
+#define UNCONCTION "0"
+#define BUFFER_SIZE 1024
+
+
+
+
 class Manager {
 private:
     bool _isWhiteTurn;
@@ -24,11 +32,10 @@ private:
     Board createBoard(std::string&);
 
 public:
-    
+    //ctor and dtor
     Manager(Pipe,std::string);
-    
     ~Manager();
-   
+   //public funcs
     bool validateMove(Piece* piece, std::string& newPosition);
     void movePiece(Piece* piece, std::string& newPosition); 
     bool isCheck(bool); 

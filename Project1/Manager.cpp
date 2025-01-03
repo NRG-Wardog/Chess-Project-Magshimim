@@ -2,17 +2,24 @@
 #include "Board.h"
 #include "Piece.h"
 #include <iostream>
-
 #include "MoveException.h"
+
 #define START_OF_BOARD 'a'
 #define START_OF_NUM 1
+#define WHITE_MOVE '0'
+#define ENTER '\n'
+#define END '\0'
+#define KING "King"
+#define OVER "quit"
 
 
+//C'tor
+//checks if the last char is for white to play
 Manager::Manager(Pipe p,std::string chess) : _p(p),_board(chess)
 {
-    _isWhiteTurn = chess[64] == '0';
+    _isWhiteTurn = chess[CHESS_BOARD_SIZE] == WHITE_MOVE;
 }
-
+//d'tor
 Manager::~Manager() {}
 
 /*
@@ -42,39 +49,42 @@ output:true or false
 */
 bool Manager::isCheck(bool turn)
 {
-    char kingColor = turn ? 'w' : 'b';
+    char kingColor = turn ? WHITE : BLACK;
+    bool isAtk = false;
+    bool flag = true;//didnt find king
+    int row = 0, col = 0;
     // Find the king's position
-    std::string kingPosition;
-    for (int row = 0; row < CHESS_SIZE; ++row) 
+    std::string kingPosition ="";
+    for (row = 0; row < CHESS_SIZE &&flag; ++row) 
     {
-        for (int col = 0; col < CHESS_SIZE; ++col) 
+        for (col = 0; col < CHESS_SIZE&&flag; ++col)
         {
             Piece* piece = _board.getBoard()[row][col];
-            if (piece != nullptr && piece->getType() == "King" && piece->getColor() == kingColor) {
+            if (piece != nullptr && piece->getType() == KING && piece->getColor() == kingColor) {
                 kingPosition = std::string(1, START_OF_BOARD + col) + std::to_string(row + START_OF_NUM);
-                break;
+                flag = false;;
             }
         }
     }
-
-    if (kingPosition.empty()) {
-        throw std::runtime_error("King not found on the board!");
+    //if not found that mean he got eat
+    if (flag) {
+        throw MoveException(MOVE_VALID_CHECKMATE);
     }
 
     // Check if any opponent's piece can move to the king's position
-    for (int row = 0; row < CHESS_SIZE; ++row) {
-        for (int col = 0; col < CHESS_SIZE; ++col) {
+    for (row = 0; row < CHESS_SIZE; ++row) {
+        for (col = 0; col < CHESS_SIZE; ++col) {
             Piece* piece = _board.getBoard()[row][col];
             if (piece != nullptr && piece->getColor() != kingColor) {
                 std::string opponentPiecePosition = std::string(1, START_OF_BOARD + col) + std::to_string(row + START_OF_NUM);
                 try
                 {
-                    if (piece->canMove(kingPosition) && _board.isPathClear(row, col, kingPosition[1] - '1', kingPosition[0] - 'a', piece->getType()))
+                    if (piece->canMove(kingPosition) && _board.isPathClear(row, col, kingPosition[COL] - START_OF_NUM_AS_CHAR, kingPosition[ROW] - START_OF_BOARD, piece->getType()))
                     {
-                        return true; // The king is under attack
+                        isAtk=true; // The king is under attack
                     }
                 }
-                catch(...)
+                catch(...)// just becuse it may sent error mesage from canMove or isPathClear
                 {
                     continue;
                 }
@@ -82,7 +92,7 @@ bool Manager::isCheck(bool turn)
         }
     }
 
-    return false; // The king is not under attack
+    return isAtk; // The king is not under attack
 }
 
 /*
@@ -92,20 +102,31 @@ Output: none
 */
 Board Manager::createBoard(std::string& strBoard)
 {
-    if (strBoard.size() < 65) { throw std::runtime_error("size of board invalid."); }
-    _isWhiteTurn = strBoard[64] == WHITE_TURN;
+    if (strBoard.size() != CHESS_BOARD_SIZE +1 ) { throw std::runtime_error("size of board invalid."); }
+    _isWhiteTurn = strBoard[CHESS_BOARD_SIZE] == WHITE_TURN;
     _board = Board(strBoard);
     return _board;
 }
 
+/*
+* func reset game board
+* input:none
+* output:none
+*/
 void Manager::resetGame()
 {
-    std::string _chessboard = "rnbqkbnrpppppppp############################PPPPPPPPRNBQKBNR"; // like startgame in mangager
+    std::string _chessboard = BOARD_LETTERS; // like startgame in mangager
     gameLoop(_chessboard);
 }
 
+/*
+* func check if game ended annd return true or false
+* input:none
+* output:bool true or false -- for now its false because it bouns
+*/
 bool Manager::isGameOver()
 {
+    
     return false;
 }
 
@@ -127,18 +148,18 @@ Output: none
 */
 void Manager::gameLoop(std::string strBoard)
 {
-    char msgToGraphics[1024];
+    char msgToGraphics[BUFFER_SIZE];
     strcpy_s(msgToGraphics, _board.toString().c_str()); 
     _p.sendMessageToGraphics(msgToGraphics);
     displayBoard();
     std::string msgFromGraphics = _p.getMessageFromGraphics();
     
-    while (isGameOver() == false && msgFromGraphics != "quit")
+    while (isGameOver() == false && msgFromGraphics != OVER)
     {
         try {
             std::string from = msgFromGraphics.substr(0,2);
             std::string to = msgFromGraphics.substr(2, 4);
-            std::cout << from << "," << to << "\n";
+            std::cout << from << "," << to << ENTER;
             
             if (from == to)
             {
@@ -149,8 +170,8 @@ void Manager::gameLoop(std::string strBoard)
             {
                 throw MoveException(MOVE_INVALID_SOURCE_EMPTY);
             }
-            std::cout << *selectedPiece << "\n";
-            if ((_isWhiteTurn && selectedPiece->getColor() != 'w') ||(!_isWhiteTurn && selectedPiece->getColor() != 'b')) {
+            std::cout << *selectedPiece << ENTER;
+            if ((_isWhiteTurn && selectedPiece->getColor() != WHITE) ||(!_isWhiteTurn && selectedPiece->getColor() != BLACK)) {
                 throw MoveException(MOVE_INVALID_SOURCE_EMPTY);
             }
             
@@ -172,19 +193,18 @@ void Manager::gameLoop(std::string strBoard)
         }
         catch (const std::exception& e) 
         {
-            std::memset(msgToGraphics, '\0', sizeof(msgToGraphics));
+            std::memset(msgToGraphics, END, sizeof(msgToGraphics));
             if (e.what() == MOVE_VALID_STR || e.what() == MOVE_VALID_CHECK_STR)
             {
-                bool validateMove(Piece * piece, int x, int y);
                 strcpy_s(msgToGraphics, sizeof(msgToGraphics), "0");
                 _isWhiteTurn = !_isWhiteTurn;
             }
             strcpy_s(msgToGraphics, e.what());
-            msgToGraphics[1] = 0;
+            msgToGraphics[COL] = 0;
             std::cerr << "code:" << e.what() << std::endl;
             _p.sendMessageToGraphics(msgToGraphics);
         }
-        std::cout << "\n";
+        std::cout << ENTER;
         
         displayBoard();
         msgFromGraphics = _p.getMessageFromGraphics();

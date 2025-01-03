@@ -1,5 +1,8 @@
 #include "Pwn.h"
+#define TYPE "Pwn"
 
+
+//c'tor
 Pwn::Pwn(char col, const std::string& pos) : Piece(col,pos), _firstMove(true)
 {}
 
@@ -12,11 +15,13 @@ Pwn::Pwn(char col, const std::string& pos) : Piece(col,pos), _firstMove(true)
 */
 void Pwn::move(const std::string & newPosition)
 {
-    if (canMove(newPosition)) {
+    if (canMove(newPosition)) 
+    {
         setPosition(newPosition);
         _firstMove = false;
     }
-    else {
+    else 
+    {
         throw MoveException(MOVE_INVALID_ILLEGAL_PIECE_MOVE);
     }
 }
@@ -39,8 +44,13 @@ bool Pwn::canMove(const std::string& newPosition) const
     return (firstVAL && (secondVal || (_firstMove && theredVal)));
 }
 
+/*
+* func return type of piece
+* input:none
+* output:string type
+*/
 std::string Pwn::getType() const
 {
-    return std::string("Pwn");
+    return std::string(TYPE);
 }
 

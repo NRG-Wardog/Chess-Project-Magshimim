@@ -10,26 +10,31 @@
 #include "Rook.h"
 #include "Piece.h"
 
-#define START_OF_BOARD 'a'
 #define START_OF_NUM 1
 #define WHITE 'w'
 #define BLACK 'b'
 
+//ctor,dtor
 Board::Board(const std::string& boardData) : _board(CHESS_SIZE, std::vector<Piece*>(CHESS_SIZE, nullptr))
 {
-    _whiteTurn = boardData[64] == '0';
+    _whiteTurn = boardData[CHESS_BOARD_SIZE] == START_OF_NUM_BOARD;
     setBoard(boardData); 
 }
 
 Board::~Board() {
-    for (int row = 0; row < CHESS_SIZE; ++row) {
-        for (int col = 0; col < CHESS_SIZE; ++col) {
+    int row = 0, col = 0;
+    for (row = 0; row < CHESS_SIZE; ++row) {
+        for (col = 0; col < CHESS_SIZE; ++col) {
             delete _board[row][col]; 
         }
     }
 }
 
-
+/*
+* func return board
+* input:none
+* output:return board
+*/
 const std::vector<std::vector<Piece*>>& Board::getBoard() const {
     return _board;
 }
@@ -40,11 +45,11 @@ const std::vector<std::vector<Piece*>>& Board::getBoard() const {
 * Output: position 
 */
 Piece* Board::getSymbol(std::string& pos) const {
-    if (pos.size() != 2 || pos[0] < 'a' || pos[0] > 'h' || pos[1] < '1' || pos[1] > '8') {
+    if (pos.size() != POS_SIZE || pos[ROW] < START_OF_BOARD || pos[ROW] > CHESS_END_OF_BOARD || pos[COL] < START_OF_NUM_AS_CHAR || pos[COL] > CHESS_SIZE_AS_CHAR) {
         throw MoveException(MOVE_INVALID_OUT_OF_BOUNDS);
     }
-    auto col = pos[0] - 'a'; // Column is derived from the file (letter)
-    auto row = pos[1]-'1'; // Row is derived from the rank (number)
+    auto col = pos[ROW] - START_OF_BOARD; // Column is derived from the file (letter)
+    auto row = pos[COL]- START_OF_NUM_AS_CHAR; // Row is derived from the rank (number)
     return _board[row][col];
 }
 
@@ -56,7 +61,7 @@ Piece* Board::getSymbol(std::string& pos) const {
 */
 void Board::setBoard(const std::string& boardData)
 {
-    if (boardData.size() != CHESS_SIZE * CHESS_SIZE +1)
+    if (boardData.size() != CHESS_BOARD_SIZE +1)
     {
         throw std::runtime_error("Invalid board data size. Expected 64 characters.");
     }
@@ -149,8 +154,6 @@ std::string Board::toString() const {
     }
     return boardString;
 }
-
-
 
 
 /*
@@ -257,7 +260,11 @@ bool Board::isPathClear(const int fromRow, const int fromCol, const int toRow, c
     return false; // Invalid piece type or unsupported path validation
 }
 
-// Helper function to check straight paths (used by Rook and Queen)
+/*
+ * func Checks if a straight path between two positions on the board is clear of obstacles.
+ * input: fromRow , fromCol,toRow,toCol
+ * output:true if the path is clear, otherwise false.
+ */
 bool Board::isStraightPathClear(const int fromRow, const int fromCol, const int toRow, const int toCol) const {
     int rowDiff = toRow - fromRow;
     int colDiff = toCol - fromCol;
@@ -283,13 +290,18 @@ bool Board::isStraightPathClear(const int fromRow, const int fromCol, const int 
 }
 
 
-// Helper function to check diagonal paths (used by Bishop and Queen)
+/*
+ * func Checks if a diagonal path between two positions on the board is clear of obstacles.
+ * input:fromRow,fromCol,toRow, toCol
+ * output: true if the path is clear, otherwise false.
+ */
 bool Board::isDiagonalPathClear(const int fromRow, const int fromCol, const int toRow, const int toCol) const {
     int rowDiff = toRow - fromRow;
     int colDiff = toCol - fromCol;
 
     // Diagonal moves must have equal row and column differences
-    if (abs(rowDiff) != abs(colDiff)) return false;
+    if (abs(rowDiff) != abs(colDiff)) 
+        return false;
 
     // Determine direction of movement
     int rowDirection = rowDiff / abs(rowDiff);
@@ -312,7 +324,11 @@ bool Board::isDiagonalPathClear(const int fromRow, const int fromCol, const int 
 }
 
 
-
+/*
+* func print to screen board
+* intput:os,board
+* output:os
+*/
 std::ostream& operator<<(std::ostream& os, const Board& board)
 {
     std::string boardString = "";

@@ -1,11 +1,13 @@
 #include "Rook.h"
 #include "MoveException.h"
+#define TYPE "Rook"
 
+//C'TOR
 Rook::Rook(char col, const std::string& pos)
     : Piece(col, pos)
 {
-    if (pos.size() != 2 || pos[ROW] < START_OF_BOARD || pos[ROW] > CHESS_END_OF_BOARD || pos[COL] < START_OF_NUM_AS_CHAR || pos[COL] > CHESS_SIZE_AS_CHAR) {
-        throw MoveException(MOVE_INVALID_OUT_OF_BOUNDS); // Invalid position indices
+    if (pos.size() != POS_SIZE || pos[ROW] < START_OF_BOARD || pos[ROW] > CHESS_END_OF_BOARD || pos[COL] < START_OF_NUM_AS_CHAR || pos[COL] > CHESS_SIZE_AS_CHAR) {
+        throw MoveException(MOVE_INVALID_OUT_OF_BOUNDS); 
     }
 }
 
@@ -29,7 +31,7 @@ void Rook::move(const std::string& newPosition) {
 */
 bool Rook::canMove(const std::string& newPosition) const {
     // Validate position format
-    if (newPosition.size() != 2 || newPosition[ROW] < START_OF_BOARD || newPosition[ROW] > CHESS_END_OF_BOARD || newPosition[COL] < START_OF_NUM_AS_CHAR || newPosition[COL] > CHESS_SIZE_AS_CHAR)
+    if (newPosition.size() != POS_SIZE || newPosition[ROW] < START_OF_BOARD || newPosition[ROW] > CHESS_END_OF_BOARD || newPosition[COL] < START_OF_NUM_AS_CHAR || newPosition[COL] > CHESS_SIZE_AS_CHAR)
     {
         throw MoveException(MOVE_INVALID_OUT_OF_BOUNDS); // Invalid position indices
     }
@@ -47,7 +49,12 @@ bool Rook::canMove(const std::string& newPosition) const {
     return false;
 }
 
+/*
+*func return string type
+* input:none
+* output:string type
+*/
 std::string Rook::getType() const
 {
-    return std::string("Rook");
+    return std::string(TYPE);
 }
