@@ -36,7 +36,7 @@ public:
     Manager(Pipe,std::string);
     ~Manager();
    //public funcs
-    bool validateMove(Piece* piece, std::string& newPosition);
+    //bool validateMove(Piece* piece, std::string& newPosition);
     void movePiece(Piece* piece, std::string& newPosition); 
     bool isCheck(bool); 
     void resetGame(); 

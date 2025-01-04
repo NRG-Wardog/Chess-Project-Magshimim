@@ -249,7 +249,7 @@ bool Board::isPathClear(const int fromRow, const int fromCol, const int toRow, c
         if (fromRow == toRow || fromCol == toCol) {
             return isStraightPathClear(fromRow, fromCol, toRow, toCol);
         }
-        else if (abs(rowDiff) == abs(colDiff)) {
+        else if (rowDiff == colDiff) {
             return isDiagonalPathClear(fromRow, fromCol, toRow, toCol);
         }
         return false; // Invalid move for Queen
@@ -300,7 +300,7 @@ bool Board::isDiagonalPathClear(const int fromRow, const int fromCol, const int 
     int colDiff = toCol - fromCol;
 
     // Diagonal moves must have equal row and column differences
-    if (abs(rowDiff) != abs(colDiff)) 
+    /**/if (abs(rowDiff) != abs(colDiff))
         return false;
 
     // Determine direction of movement
@@ -308,10 +308,10 @@ bool Board::isDiagonalPathClear(const int fromRow, const int fromCol, const int 
     int colDirection = colDiff / abs(colDiff);
 
     // Check path for obstacles
-    int currentRow = fromRow + rowDirection;
+    int currentRow = fromRow - 1 + rowDirection;
     int currentCol = fromCol + colDirection;
-    while ((currentRow != toRow || currentCol != toCol)) {
-        if (currentRow == toRow - rowDirection && currentCol == toCol - colDirection) {
+    while ((currentRow != toRow - 1 || currentCol != toCol)) {
+        if (currentRow == (toRow - rowDirection - 1) && currentCol == toCol - colDirection) {
             break; // Stop one square before the target
         }
         if (_board[currentRow][currentCol] != nullptr) {

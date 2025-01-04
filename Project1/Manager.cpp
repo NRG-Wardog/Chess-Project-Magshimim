@@ -27,10 +27,10 @@ Validates the move.
 Input: Piece pointer piece, string reference newPosition.
 Output: true or false
 */
-bool Manager::validateMove(Piece* piece, std::string& newPosition)
-{
-    return piece->canMove(newPosition);
-}
+//bool Manager::validateMove(Piece* piece, std::string& newPosition)
+//{
+//    return piece->canMove(newPosition);
+//}
 
 /*
 Moves the piece itself.
