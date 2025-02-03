@@ -4,7 +4,7 @@
 This project is a console-based chess game implemented in C++. It allows two players to play a full game of chess with rule enforcement, including piece movement validation and checkmate detection.
 
 ## Features
-- Fully functional chess game with standard rules.
+- Almost fully functional chess game with standard rules only (mate and stalemate are out).
 - Supports all chess pieces: Pawn, Rook, Knight, Bishop, Queen, and King.
 - Move validation for each piece.
 - Check and Checkmate detection.
@@ -14,14 +14,14 @@ This project is a console-based chess game implemented in C++. It allows two pla
 ## Installation & Compilation
 ### Prerequisites
 - A C++ compiler (GCC, Clang, or MSVC)
-- CMake (optional, for easier compilation)
+- VS (optional, for easier compilation)
 - Windows OS (named pipes are used for communication with the graphics interface)
 
 ### Compilation Steps
 1. Clone the repository:
    ```sh
    git clone https://github.com/ysilberg/Chess-Project-Magshimim.git
-   cd <project-directory>
+   cd Chess-Project-Magshimim
    ```
 2. Compile using g++:
    ```sh
@@ -62,9 +62,8 @@ This project is a console-based chess game implemented in C++. It allows two pla
 - Support for castling, en passant, and pawn promotion.
 
 ## Credits
-- Developed by [Your Name].
+- Developed by [Dorian Salomon and yan].
 - Chess rules and logic inspired by standard FIDE regulations.
 
 ## License
 This project is licensed under the MIT License.
-
