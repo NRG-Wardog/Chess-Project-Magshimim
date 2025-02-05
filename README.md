@@ -1,7 +1,7 @@
 # Chess Game Project
 
 ## Overview
-This project is a console-based chess game implemented in C++. It allows two players to play a full game of chess with rule enforcement, including piece movement validation and checkmate detection.
+This project is a console-based chess game implemented in C++. It allows two players to play a full game of chess with rule enforcement, including piece movement validation.
 
 ## Features
 - Almost fully functional chess game with standard rules only (mate and stalemate are out).
